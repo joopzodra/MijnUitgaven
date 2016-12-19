@@ -28,11 +28,15 @@ module.exports = function(config) {
       inline: true
     },
 
-    reporters: ['progress'],
+    reporters: ['progress','html'],
     port: 9876,
     colors: true,
     logLevel: config.LOG_INFO,
-    browsers: ['Chrome']
+    browsers: ['Chrome'],
+    htmlReporter: {
+      pageTitle: 'Unit Tests',
+      //subPageTitle: '__dirname NOG INVULLEN'
+    }
   };
 
   config.set(_config);
