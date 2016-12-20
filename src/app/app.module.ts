@@ -1,5 +1,7 @@
 import { NgModule, ErrorHandler } from '@angular/core';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
+import { Storage } from '@ionic/storage';
+
 import { MyApp } from './app.component';
 import { OverviewPage } from '../pages/overview/overview';
 import { OverviewPie } from '../pages/overview/pie/pie';
@@ -23,6 +25,9 @@ import { ListPage } from '../pages/list/list';
     OverviewPage,    
     ListPage
   ],
-  providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}]
+  providers: [
+  {provide: ErrorHandler, useClass: IonicErrorHandler},
+  Storage
+  ]
 })
 export class AppModule {}
