@@ -1,6 +1,6 @@
 import { NgModule, ErrorHandler } from '@angular/core';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
-import { Storage } from '@ionic/storage';
+import { SQLite } from '@ionic-native';
 
 import { MyApp } from './app.component';
 import { OverviewPage } from '../pages/overview/overview';
@@ -27,7 +27,7 @@ import { ListPage } from '../pages/list/list';
   ],
   providers: [
   {provide: ErrorHandler, useClass: IonicErrorHandler},
-  Storage
+  SQLite
   ]
 })
 export class AppModule {}
