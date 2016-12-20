@@ -15,7 +15,7 @@ export class OverviewPie {
 
   margin = { top: 20, bottom: 20, left: 20, right: 20};
   width = 500;
-  height = 500;
+  height = 300;
   radius = Math.min(this.width, this.height) / 2;
   //@Input() private data: Array<any>;
   data = [8, 15, 16, 23, 42];
@@ -43,7 +43,7 @@ export class OverviewPie {
     let detachedContainer = document.createElement('customContainer');
     this.dataContainer = d3.select(detachedContainer);
 
-    let path = this.dataContainer.selectAll('customPie.path')
+    let path = this.dataContainer.selectAll('customPie')
     .data(arcs)
     .enter()
     .append('customPie')
@@ -53,7 +53,7 @@ export class OverviewPie {
   }
 
   setPathsData() {
-    let elements = this.dataContainer.selectAll('customPie.path');
+    let elements = this.dataContainer.selectAll('customPie');
     let that = this;
 
     elements.each(function(d, i) { 
