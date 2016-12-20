@@ -1,0 +1,19 @@
+<h2>Laatste 12 maanden rubriek Y</h2>
+<div class="d3-line-chart" #chart>
+
+  <svg [attr.width]="width + margin.left + margin.right" [attr.height]="height + margin.top + margin.bottom">
+
+    <g [attr.transform]="'translate(' + margin.left + ',' + margin.top + ')'">
+
+      <path [attr.d]="linePath"></path>
+
+      <g class="xAxis">
+        <line [attr.x1]="0" [attr.y1]="height" [attr.x2]="width" [attr.y2]="height"></line>
+        <line *ngFor="let tick of xTicksPaths" [attr.x1]="tick.x1" [attr.y1]="tick.y1" [attr.x2]="tick.x2" [attr.y2]="tick.y2"></line>
+        <text *ngFor="let label of xLabels" [attr.x]="label.x" [attr.y]="label.y">{{label.text}}</text>
+      </g>
+    </g>
+
+  </svg>
+
+</div>

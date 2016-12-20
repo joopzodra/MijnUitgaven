@@ -1,0 +1,13 @@
+<h2>maand X</h2>
+
+<div class="d3-pie-chart" #chart>
+
+  <svg [attr.width]="width + margin.left + margin.right" [attr.height]="height + margin.top + margin.bottom">
+
+    <g [attr.transform]="'translate(' + width/2 + ',' + height/2 + ')'">
+
+      <path *ngFor="let path of paths" [attr.d]="path.d" [attr.fill]="path.fill" ></path>
+    
+    </g>
+  </svg>
+</div>
