@@ -1,0 +1,20 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      DB Test
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+
+<h2>DB Test pagina</h2>
+
+<p *ngFor="let name of people">{{name}}</p>
+
+  
+
+  <button (click)="addName()">Voeg naam toe aan database</button>
+  <button (click)="getName()">refresh database</button>
+
+</ion-content>

@@ -1,12 +1,12 @@
-import { Component, ViewChild, ElementRef, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 
 import * as d3 from 'd3-selection';
 import * as d3Shape from 'd3-shape';
 import * as d3Scale from 'd3-scale';
 import * as d3Time from 'd3-time';
-import * as d3TimeFormat from 'd3-time-format';
-import * as d3Array from "d3-array";
+/*import * as d3TimeFormat from 'd3-time-format';
+*/import * as d3Array from "d3-array";
 
 import { ListPage } from '../../list/list';
 
@@ -132,7 +132,7 @@ export class OverviewLine {
   }
 
   setCircleAttr() {
-    let elements = this.dataContainer.selectAll('customCircle'); console.log(elements)
+    let elements = this.dataContainer.selectAll('customCircle');
     let that = this;
 
     elements.each(function(d, i) {

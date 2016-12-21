@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 
 import { ListPage } from '../list/list';
+import { DbTestPage } from '../dbtest/dbtest';
 
 @Component({
   selector: 'page-overview',
@@ -15,6 +16,10 @@ export class OverviewPage {
 
   toList() {
     this.navCtrl.push(ListPage);
+  }
+
+  toDbTest() {
+    this.navCtrl.push(DbTestPage);
   }
 
 }

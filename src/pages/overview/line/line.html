@@ -1,7 +1,7 @@
 <h2>Laatste 12 maanden rubriek Y</h2>
 <div class="d3-line-chart" #chart>
 
-  <svg [attr.width]="width + margin.left + margin.right" [attr.height]="height + margin.top + margin.bottom">
+  <svg [attr.viewBox]="'0 0 ' + (width + margin.left + margin.right) + ' ' + (height + margin.top + margin.bottom)">
 
     <g [attr.transform]="'translate(' + margin.left + ',' + margin.top + ')'">
 

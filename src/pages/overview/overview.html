@@ -1,24 +1,26 @@
-<ion-header>
-  <ion-navbar>
-    <ion-title>
-      Overzicht
-    </ion-title>
-  </ion-navbar>
-</ion-header>
+  <ion-header>
+    <ion-navbar>
+      <ion-title>
+        Overzicht
+      </ion-title>
+    </ion-navbar>
+  </ion-header>
 
-<ion-content padding>
-  <div>
-    <pie-chart></pie-chart>
-  </div>
+  <ion-content padding>
 
-  <div>
-    <line-chart></line-chart>
-  </div>
+    <button class="to-list" (click)="toList()">+</button>
+    <button (click)="toDbTest()">ga naar de database testpagina</button>
 
-  <div>
-    <h2>laatste 6 maanden</h2>
-  </div>
+    <div>
+      <pie-chart></pie-chart>
+    </div>
 
-  <button class="to-list" (click)="toList()">+</button>
+    <div>
+      <line-chart></line-chart>
+    </div>
 
-</ion-content>
+    <div>
+      <h2>laatste 6 maanden</h2>
+    </div>
+
+  </ion-content>

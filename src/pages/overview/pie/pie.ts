@@ -1,9 +1,8 @@
-import { Component, ViewChild, ElementRef, Input } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { Component } from '@angular/core';
+import { NavController, Platform } from 'ionic-angular';
 
 import * as d3 from 'd3-selection';
 import * as d3Shape from 'd3-shape';
-import * as d3Scale from 'd3-scale';
 
 import { ListPage } from '../../list/list';
 
@@ -12,6 +11,8 @@ import { ListPage } from '../../list/list';
   templateUrl: 'pie.html'
 })
 export class OverviewPie {
+
+  deviceWidth;
 
   margin = { top: 20, bottom: 20, left: 20, right: 20};
   width = 500;
@@ -23,9 +24,10 @@ export class OverviewPie {
   dataContainer: d3.Selection<d3.BaseType, {}, null, undefined>;
   paths: {d: string, fill: string}[] = [];
 
-  constructor(public navCtrl: NavController) { }
+  constructor(public navCtrl: NavController, private platform: Platform) { }
 
   ngOnInit() {
+    this.deviceWidth = this.platform.width();
     this.drawCustomPie();
     this.setPathsData();
   }
@@ -43,7 +45,7 @@ export class OverviewPie {
     let detachedContainer = document.createElement('customContainer');
     this.dataContainer = d3.select(detachedContainer);
 
-    let path = this.dataContainer.selectAll('customPie')
+    this.dataContainer.selectAll('customPie')
     .data(arcs)
     .enter()
     .append('customPie')
