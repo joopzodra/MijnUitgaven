@@ -1,12 +1,13 @@
 import { NgModule, ErrorHandler } from '@angular/core';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
-import { SQLite } from '@ionic-native';
 
 import { MyApp } from './app.component';
 import { OverviewPage } from '../pages/overview/overview';
 import { OverviewPie } from '../pages/overview/pie/pie';
 import { OverviewLine } from '../pages/overview/line/line';
 import { ListPage } from '../pages/list/list';
+import { DbTestPage } from '../pages/dbtest/dbtest';
+import { SQLiteService } from '../services/sqlite.service';
 
 @NgModule({
   declarations: [
@@ -14,7 +15,8 @@ import { ListPage } from '../pages/list/list';
     OverviewPage,
     OverviewPie,
     OverviewLine,
-    ListPage
+    ListPage,
+    DbTestPage
   ],
   imports: [
     IonicModule.forRoot(MyApp)
@@ -23,11 +25,12 @@ import { ListPage } from '../pages/list/list';
   entryComponents: [
     MyApp,
     OverviewPage,    
-    ListPage
+    ListPage,
+    DbTestPage
   ],
   providers: [
   {provide: ErrorHandler, useClass: IonicErrorHandler},
-  SQLite
+  SQLiteService
   ]
 })
 export class AppModule {}
