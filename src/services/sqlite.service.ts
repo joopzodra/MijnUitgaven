@@ -1,34 +1,41 @@
-import {Injectable} from "@angular/core";
-/*import {SQLite} from "ionic-native";
-*/
-const DB_NAME: string = '__MijnUitgavenApp';
-const win: any = window;
+import { Injectable } from '@angular/core';
+import { AlertController } from 'ionic-angular';
+
 
 @Injectable()
 export class SQLiteService {
-  private _db: any;
 
-  constructor() {
-    if (win.sqlitePlugin) {
-      //let db = new SQLite();
-      this._db = win.sqlitePlugin.openDatabase({
-        name: DB_NAME,
-        location: 'default'
+  win: any = window;
+  db: any;
+
+  constructor(private alertCtrl: AlertController) {
+    if (this.win.sqlitePlugin) {
+      this.db = this.win.sqlitePlugin.openDatabase({
+        name: 'MijnUitgaven.sqlite',
+        location: 'default',
+        createFromLocation: 1
       });
+      this.db.transaction(tr => {
+        tr.executeSql("select * from posten;", [], function(ts, rs) {
+          console.log('Got somehow a result: ' + rs.rows.item(0)['omschrijving']);
+        });
+      });
+
     } else {
-      console.warn('Storage: SQLite plugin not installed, falling back to WebSQL. Make sure to install cordova-sqlite-storage in production!');
-      this._db = win.openDatabase(DB_NAME, '1.0', 'database', 5 * 1024 * 1024);
+      console.warn('Storage: SQLite plugin not installed, falling back to WebSQL. Make sure to install cordova-sqlite-ext in production!');
+      this.db = this.win.openDatabase('MijnUitgaven', '1.0', 'database', 5 * 1024 * 1024);
     }
-    this._tryInit();
   }
 
-  // Initialize the DB with our required tables
-  _tryInit() {
-    this.query('CREATE TABLE IF NOT EXISTS kv (key text primary key, value text)').catch(err => {
-      console.error('Storage: Unable to create initial storage tables', err.tx, err.err);
-    });
-  }
+  showAlert(message: string) {
+    let alert = this.alertCtrl.create(
+      {
+        title: message,
+        buttons: ['OK']
+      });
 
+    alert.present();
+  };
 
   /* Perform an arbitrary SQL operation on the database. Use this method
    * to have full control over the underlying database through SQL operations
@@ -36,14 +43,14 @@ export class SQLiteService {
   query(query: string, params: any[] = []): Promise<any> {
     return new Promise((resolve, reject) => {
       try {
-        this._db.transaction((tx: any) => {
-            tx.executeSql(query, params,
-              (tx: any, res: any) => resolve({tx: tx, res: res}),
-              (tx: any, err: any) => reject({tx: tx, err: err}));
-          },
-          (err: any) => reject({err: err}));
+        this.db.transaction((tx: any) => {
+          tx.executeSql(query, params,
+            (tx: any, res: any) => resolve({ tx: tx, res: res }),
+            (tx: any, err: any) => reject({ tx: tx, err: err }));
+        },
+          (err: any) => reject({ err: err }));
       } catch (err) {
-        reject({err: err});
+        reject({ err: err });
       }
     });
   }
