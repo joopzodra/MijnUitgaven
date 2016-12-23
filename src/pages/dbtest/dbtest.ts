@@ -15,13 +15,13 @@ export class DbTestPage {
     
   }
 
-  addName() {
+/*  addName() {
     this.sqlite.set('joop', 'jooprosier');
   }
 
   getName() {
     this.sqlite.get('joop')
     .then(v => this.people.push(v));    
-  }
+  }*/
 
 }

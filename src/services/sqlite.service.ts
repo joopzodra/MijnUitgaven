@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AlertController } from 'ionic-angular';
-
+import { Http, Response } from '@angular/http';
 
 @Injectable()
 export class SQLiteService {
@@ -8,38 +7,34 @@ export class SQLiteService {
   win: any = window;
   db: any;
 
-  constructor(private alertCtrl: AlertController) {
+  constructor(private http: Http) {
     if (this.win.sqlitePlugin) {
       this.db = this.win.sqlitePlugin.openDatabase({
         name: 'MijnUitgaven.sqlite',
         location: 'default',
         createFromLocation: 1
       });
-      this.db.transaction(tr => {
-        tr.executeSql("select * from posten;", [], function(ts, rs) {
+      this.db.transaction(tx => {
+        tx.executeSql('SELECT * FROM posten;', [], function(ts, rs) {
           console.log('Got somehow a result: ' + rs.rows.item(0)['omschrijving']);
         });
       });
 
     } else {
       console.warn('Storage: SQLite plugin not installed, falling back to WebSQL. Make sure to install cordova-sqlite-ext in production!');
-      this.db = this.win.openDatabase('MijnUitgaven', '1.0', 'database', 5 * 1024 * 1024);
+      let csv: string = require('../assets/mijnuitgaven-csv');
+      let data = csv.split('\n').map(row => row.split(';')).slice(1); //don't use the first row with labels
+      this.db = this.win.openDatabase('MijnUitgaven', '1.0', 'database MijnUitgaven', 2 * 1024 * 1024);
+      this.db.transaction(tx => {
+        //tx.executeSql('drop table posten')
+        tx.executeSql('CREATE TABLE IF NOT EXISTS posten (id INTEGER PRIMARY KEY, datum TEXT, bedrag REAL, betaalwijze TEXT, omschrijving TEXT)');
+        tx.executeSql('INSERT INTO posten (datum, bedrag, betaalwijze, omschrijving) VALUES ("2010001", 75.25, "PIN", "Mijn betaling hihaho")', null, (tx, res) => console.log(res), (tx, err) => console.log(err));
+        tx.executeSql('INSERT INTO posten (datum, bedrag, betaalwijze, omschrijving) VALUES ("1930", 75.25, "KAS", "Mijn betaling mu")', null, (tx, res) => console.log(res), (tx, err) => console.log(err));
+
+      });
     }
   }
 
-  showAlert(message: string) {
-    let alert = this.alertCtrl.create(
-      {
-        title: message,
-        buttons: ['OK']
-      });
-
-    alert.present();
-  };
-
-  /* Perform an arbitrary SQL operation on the database. Use this method
-   * to have full control over the underlying database through SQL operations
-   * like SELECT, INSERT, and UPDATE.*/
   query(query: string, params: any[] = []): Promise<any> {
     return new Promise((resolve, reject) => {
       try {
@@ -55,47 +50,4 @@ export class SQLiteService {
     });
   }
 
-
-  //Get the value in the database identified by the given key.
-  get(key: string): Promise<any> {
-    return this.query('select key, value from kv where key = ? limit 1', [key]).then(data => {
-      if (data.res.rows.length > 0) {
-        return data.res.rows.item(0).value;
-      }
-    });
-  }
-
-  // Set the value in the database for the given key. Existing values will be overwritten.
-  set(key: string, value: string): Promise<any> {
-    return this.query('insert or replace into kv(key, value) values (?, ?)', [key, value]);
-  }
-
-  getJson(key: string): Promise<any> {
-    return this.get(key).then(value => {
-      try {
-        return JSON.parse(value);
-      } catch (e) {
-        console.warn('Storage getJson(): unable to parse value for key', key, ' as JSON');
-        throw e; // rethrowing exception so it can be handled with .catch()
-      }
-    });
-  }
-
-  setJson(key: string, value: any): Promise<any> {
-    try {
-      return this.set(key, JSON.stringify(value));
-    } catch (e) {
-      return Promise.reject(e);
-    }
-  }
-
-  // Remove the value in the database for the given key.
-  remove(key: string): Promise<any> {
-    return this.query('delete from kv where key = ?', [key]);
-  }
-
-  //Clear all keys/values of your database.
-  clear(): Promise<any> {
-    return this.query('delete from kv');
-  }
 }
