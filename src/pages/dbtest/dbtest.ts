@@ -15,8 +15,8 @@ export class DbTestPage {
 
   ngOnInit() {
 
-    let query = 'SELECT * FROM posten';
-    this.sqlite.query(query, [])
+    let query = 'SELECT * FROM entries';
+    this.sqlite.query(query)
     .then(respons => {
       let length = respons.res.rows.length;
       for (let i = 1; i < length; i++) {
