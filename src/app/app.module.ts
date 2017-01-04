@@ -6,11 +6,13 @@ import { OverviewPage } from '../pages/overview/overview';
 import { OverviewPie } from '../pages/overview/pie/pie';
 import { OverviewLine } from '../pages/overview/line/line';
 import { ListPage } from '../pages/list/list';
-import { DbTestPage } from '../pages/dbtest/dbtest';
+import { ItemDetail } from '../pages/itemdetail/itemdetail';
+
 import { EuroPipe } from '../pipes/euro.pipe';
 import { DatePipe } from '../pipes/date.pipe';
 
 import { SQLiteService } from '../services/sqlite.service';
+import { CategoriesService } from '../services/categories.service';
 
 @NgModule({
   declarations: [
@@ -19,23 +21,26 @@ import { SQLiteService } from '../services/sqlite.service';
     OverviewPie,
     OverviewLine,
     ListPage,
-    DbTestPage,
+    ItemDetail,
     EuroPipe,
     DatePipe
   ],
   imports: [
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(MyApp, {
+      backButtonText: 'Terug'
+    })
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
     OverviewPage,    
     ListPage,
-    DbTestPage
+    ItemDetail
   ],
   providers: [
   {provide: ErrorHandler, useClass: IonicErrorHandler},
-  SQLiteService
-  ]
+  SQLiteService,
+  CategoriesService
+  ]   
 })
 export class AppModule {}

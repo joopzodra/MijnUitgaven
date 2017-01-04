@@ -1,0 +1,47 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Details
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding class="itemdetails">
+
+<ion-list>
+
+  <ion-list-header>
+    Je kunt rubriek en subrubriek aanpassen
+  </ion-list-header>
+
+  <ion-list>
+    <ion-item>
+      <ion-label>Rubriek: </ion-label>
+      <ion-select [(ngModel)]="category">
+        <ion-option *ngFor="let cat of categories" [value]="cat" (click)="changeCategory(cat)">{{cat}}</ion-option>
+      </ion-select>
+    </ion-item>
+  </ion-list> 
+
+  <ion-item>
+    <ion-label>Subrubriek</ion-label>
+    <ion-input type="text" placeholder="{{item.subcategory}}"></ion-input>
+  </ion-item>  
+
+</ion-list>
+
+<ion-card>
+
+  <ion-card-header>
+    {{item.amount | euro}}
+  </ion-card-header>
+
+  <ion-card-content>
+    <p>{{item.date | date }}</p>
+    <p>{{item.payment_method | uppercase }}</p>
+    <p class="item-description">{{item.description}}</p>
+  </ion-card-content>
+
+</ion-card>
+
+</ion-content>

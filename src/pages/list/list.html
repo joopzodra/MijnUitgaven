@@ -8,10 +8,18 @@
 
 <ion-content padding>
 
-  <h2>Details in lijst</h2>
+  <ion-list>
+    <ion-item>
+      <ion-label>Sorteer op: </ion-label>
+      <ion-select [(ngModel)]="sortBy" (ionChange)="sort()">
+        <ion-option value="date">datum</ion-option>
+        <ion-option value="amount">bedrag</ion-option>
+      </ion-select>
+    </ion-item>
+  </ion-list>  
 
   <ion-list>
-    <ion-item *ngFor="let result of results">
+    <ion-item *ngFor="let result of results" (click)="itemSelected(result)" detail-push>
       <ion-icon item-left class="ion-icon">
       </ion-icon>
       <div class="list-cat-wrapper">

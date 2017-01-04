@@ -13,7 +13,7 @@ describe('SQLiteService', () => {
       tx.executeSql('DELETE FROM entries');
       tx.executeSql('CREATE TABLE IF NOT EXISTS entries (id INTEGER PRIMARY KEY UNIQUE, date TEXT, amount REAL, payment_method TEXT, description TEXT, category TEXT, subcategory TEXT)', [], null, (tx, err) => console.log(err.message));
       data.slice(0, 20).forEach(row => {
-        tx.executeSql('INSERT INTO entries (id, date, amount, payment_method, description, category, subcategory) VALUES (?,?,?,?,?,?,?)', [row[0], row[1], row[2], row[3], row[4], row[5], row[6]],
+        tx.executeSql('INSERT INTO entries (id, date, amount, payment_method, description, category, subcategory) VALUES (?,?,?,?,?,?,?)', [row[0], row[1], -row[2], row[3], row[4], row[5], row[6]], //row[2] negative because amount is negative and in the list we want to work with positive values
           done(), (tx, err) => console.log(err.message));
       })
     });

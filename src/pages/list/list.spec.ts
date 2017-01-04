@@ -14,8 +14,6 @@ describe('ListPage', () => {
 
   let comp: ListPage;
   let fixture: ComponentFixture<ListPage>;
-  let de: DebugElement;
-  let el: HTMLElement;
   let sqlService: SQLiteService;
   let spy;
 
@@ -31,16 +29,16 @@ describe('ListPage', () => {
     private data = this.csv.split('\n')
       .map(row => row.split(';'))
       .slice(1, 20) //don't use the first row with labels
-      .map(row => ({ id: row[0], date: row[1], amount: row[2], payment_method: row[3], description: row[4], category: row[5], subcategory: row[6] }));
+      .map(row => ({ id: row[0], date: row[1], amount: -row[2], payment_method: row[3], description: row[4], category: row[5], subcategory: row[6] }));
 
     getCategory(cat: string): Promise<any> {
       let result = this.data.filter(row => row.category == cat);
-      let stubSqlResponse = { res: { rows: { item: i => result[i], length: result.length } } }
-      return Promise.resolve(stubSqlResponse);
+      let stubSqlResponse = { res: { rows: { item: i => result[i], length: result.length } } };
+      return new Promise((resolve, reject) => window.setTimeout(() => resolve(stubSqlResponse), 100));
     }
   }
 
-  beforeEach(async(() => {
+  beforeEach(() => {
 
     TestBed.configureTestingModule({
       declarations: [ListPage, EuroPipe, DatePipe],
@@ -61,16 +59,11 @@ describe('ListPage', () => {
       imports: [IonicModule],
     });
 
-  }));
-
-  beforeEach(() => {
     fixture = TestBed.createComponent(ListPage);
     comp = fixture.componentInstance;
-    /*    de = fixture.debugElement.query(By.css('.ion-icon'));
-        el = de.nativeElement;*/
     sqlService = fixture.debugElement.injector.get(SQLiteService);
-
     spy = spyOn(sqlService, 'getCategory').and.callThrough();
+
   });
 
   it('getCategory is called', () => {
@@ -86,25 +79,36 @@ describe('ListPage', () => {
       expect(comp.results.length).toBeGreaterThan(0);
     })
   }));
-  /*
-    it('should display 0 as initial value', () => {
+
+  it('should show list items', async(() => {
+    fixture.detectChanges();
+    fixture.whenStable().then(() => {
       fixture.detectChanges();
-      const h2 = fixture.debugElement.query(By.css('h2'));
-      expect(h2.nativeElement.textContent).toEqual('Value: 0');
-    });
-  
-    it('should increment the value', () => {
-      fixture.componentInstance.onIncrementClick();
+      let deArray = fixture.debugElement.queryAll(By.css('ion-item'));
+      expect(deArray.length).toBeGreaterThan(0);
+    })
+  }));
+
+  it('sorts by date', async(() => {
+    fixture.detectChanges();
+    fixture.whenStable().then(() => {
       fixture.detectChanges();
-      const h2 = fixture.debugElement.query(By.css('h2'));
-      expect(h2.nativeElement.textContent).toEqual('Value: 1');
-    });
-  
-    it('should invoke onIncrementClick when the user clicks the increment button', () => {
-      spyOn(fixture.componentInstance, 'onIncrementClick');
-      const button = fixture.debugElement.query(By.css('.increment'));
-      button.triggerEventHandler('click', {});
-      expect(fixture.componentInstance.onIncrementClick).toHaveBeenCalled();
-    });*/
+      for (let i = 0; i < comp.results.length - 1; i++ ) {
+        expect(comp.results[i].date).toBeGreaterThanOrEqual(comp.results[i + 1].date)
+      }
+    })
+  }));
+
+  it('sorts by amount when amount is selected', async(() => {
+    fixture.detectChanges();
+    comp.sortBy = 'amount';
+    fixture.whenStable().then(() => {
+      fixture.detectChanges();
+      for (let i = 0; i < comp.results.length - 1; i++ ) {
+        expect(comp.results[i].amount).toBeGreaterThanOrEqual(comp.results[i+1].amount)
+      }
+    })
+  }));
+
 
 });
