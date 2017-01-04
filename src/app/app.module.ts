@@ -7,6 +7,9 @@ import { OverviewPie } from '../pages/overview/pie/pie';
 import { OverviewLine } from '../pages/overview/line/line';
 import { ListPage } from '../pages/list/list';
 import { DbTestPage } from '../pages/dbtest/dbtest';
+import { EuroPipe } from '../pipes/euro.pipe';
+import { DatePipe } from '../pipes/date.pipe';
+
 import { SQLiteService } from '../services/sqlite.service';
 
 @NgModule({
@@ -16,7 +19,9 @@ import { SQLiteService } from '../services/sqlite.service';
     OverviewPie,
     OverviewLine,
     ListPage,
-    DbTestPage
+    DbTestPage,
+    EuroPipe,
+    DatePipe
   ],
   imports: [
     IonicModule.forRoot(MyApp)

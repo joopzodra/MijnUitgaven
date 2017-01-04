@@ -15,11 +15,7 @@ export class OverviewPage {
   }
 
   toList() {
-    this.navCtrl.push(ListPage);
-  }
-
-  toDbTest() {
-    this.navCtrl.push(DbTestPage);
+    this.navCtrl.push(ListPage, {category: 'woonlasten'});
   }
 
 }

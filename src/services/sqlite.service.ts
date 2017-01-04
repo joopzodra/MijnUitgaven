@@ -13,12 +13,6 @@ export class SQLiteService {
         location: 'default',
         createFromLocation: 1
       });
-      this.db.transaction(tx => {
-        tx.executeSql('SELECT * FROM entries;', [], function(ts, rs) {
-          console.log('Got somehow a result: ' + rs.rows.item(0)['description']);
-        });
-      });
-
     } else {
       console.warn('Storage: SQLite plugin not installed, falling back to WebSQL.');
       let csv: string = require('../assets/mijnuitgaven-csv');
@@ -26,9 +20,9 @@ export class SQLiteService {
       this.db = this.win.openDatabase('MijnUitgaven', '1.0', 'database MijnUitgaven', 2 * 1024 * 1024);
       this.db.transaction(tx => {
         //tx.executeSql('DELETE FROM entries');
-        tx.executeSql('CREATE TABLE IF NOT EXISTS entries (id INTEGER PRIMARY KEY UNIQUE, date TEXT, amount REAL, payment_method TEXT, description TEXT, category TEXT, subcategory TEXT)', [], null, (tx, err) => console.log(err));
-        data.slice(0, 20).forEach(row => {
-          tx.executeSql('INSERT INTO entries (id, date, amount, payment_method, description, category, subcategory) VALUES (?,?,?,?,?,?,?)', [row[0], row[1], row[2], row[3], row[4], row[5], row[6]], null, (tx, err) => console.log(err));
+        tx.executeSql('CREATE TABLE IF NOT EXISTS entries (id INTEGER PRIMARY KEY UNIQUE, date TEXT, amount REAL, payment_method TEXT, description TEXT, category TEXT, subcategory TEXT)', [], null, /*(tx, err) => console.log(err.message)*/);
+        data.forEach(row => {
+          tx.executeSql('INSERT INTO entries (id, date, amount, payment_method, description, category, subcategory) VALUES (?,?,?,?,?,?,?)', [row[0], row[1], row[2], row[3], row[4], row[5], row[6]], null, /*(tx, err) => console.log(err.message)*/);
         })
       });
     }
@@ -39,10 +33,15 @@ export class SQLiteService {
       return this.db.transaction((tx) => {
         return tx.executeSql(query, params,
           (tx, res) => resolve({ tx: tx, res: res }),
-          (tx, err) => console.log(err));
+          (tx, err) => console.log(err.message));
       });
     })
-    .catch(err => console.log(err));
+    .catch(err => console.log(err.message));
+  }
+
+  getCategory(cat: string): Promise<any> {
+    let query = 'SELECT * FROM entries WHERE category="' +  cat + '" ORDER BY date DESC';
+    return this.query(query);
   }
 
 }

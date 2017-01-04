@@ -1,25 +1,37 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { NavController, NavParams } from 'ionic-angular';
 
-import { NavController } from 'ionic-angular';
+import { SQLiteService } from '../../services/sqlite.service';
 
 @Component({
   selector: 'page-list',
   templateUrl: 'list.html'
 })
-export class ListPage {
+export class ListPage implements OnInit {
 
-  constructor(public navCtrl: NavController) {
-    
+  results = [];
+
+  constructor(private navCtrl: NavController, private navParams: NavParams, public sqlite: SQLiteService ) { }
+
+  ngOnInit() {
+    let category = this.navParams.get('category');
+    this.getCategory(category);
   }
 
-  value = 0;
-
-  onIncrementClick() {
-    this.value = Math.min(100, ++this.value);
+  getCategory(cat): Promise<any> {
+    return this.sqlite.getCategory(cat)
+    .then(response => this.setResults(response));
   }
 
-  onDecrementClick() {
-    this.value = Math.max(-100, --this.value);
+  setResults(sqlResponse): any[] {
+      let length = sqlResponse.res.rows.length;
+      for (let i = 1; i < length; i++) {
+        this.results.push(sqlResponse.res.rows.item(i));
+      }
+      return this.results;
   }
 
 }
+
+//BEA = pinbetaling
+//GEA = geldautomaat
