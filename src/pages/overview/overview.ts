@@ -13,8 +13,8 @@ export class OverviewPage {
 
   }
 
-  toList() {
-    this.navCtrl.push(ListPage, {category: 'woonlasten'});
+  toList(cat) {
+    this.navCtrl.push(ListPage, {category: cat});
   }
 
 }

@@ -3,7 +3,16 @@ ion-content.itemdetails {
 }
 
 .itemdetails {
+  .item-info {
+    margin-top: 15px;
+
+    p {
+        font-size: 1.2rem;
+    }
+  }
   .item-description {
     margin-top: 15px;
   }
+
 }
+

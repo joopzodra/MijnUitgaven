@@ -28,7 +28,7 @@ export class ListPage implements OnInit {
 
   setResults(sqlResponse): void {
       let length = sqlResponse.res.rows.length;
-      for (let i = 1; i < length; i++) {
+      for (let i = 0; i < length; i++) {
         this.results.push(sqlResponse.res.rows.item(i));
       }
       this.sort();

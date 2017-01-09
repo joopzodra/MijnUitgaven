@@ -19,7 +19,7 @@ export class SQLiteService {
       let data = csv.split('\n').map(row => row.split(';')).slice(1); //don't use the first row with labels
       this.db = this.win.openDatabase('MijnUitgaven', '1.0', 'database MijnUitgaven', 2 * 1024 * 1024);
       this.db.transaction(tx => {
-        tx.executeSql('DELETE FROM entries'); //uncomment this line if you need to refresh the database
+        //tx.executeSql('DELETE FROM entries'); //uncomment this line if you need to refresh the database
         tx.executeSql('CREATE TABLE IF NOT EXISTS entries (id INTEGER PRIMARY KEY UNIQUE, date TEXT, amount REAL, payment_method TEXT, description TEXT, category TEXT, subcategory TEXT)', [], null, /*(tx, err) => console.log(err.message)*/);
         data.forEach(row => {
           tx.executeSql('INSERT INTO entries (id, date, amount, payment_method, description, category, subcategory) VALUES (?,?,?,?,?,?,?)', [row[0], row[1], -row[2], row[3], row[4], row[5], row[6]], null, /*(tx, err) => console.log(err.message)*/); //row[2] negative because amount is negative and in the list we want to work with positive values
@@ -42,6 +42,10 @@ export class SQLiteService {
   getCategory(cat: string): Promise<any> {
     let query = 'SELECT * FROM entries WHERE category="' +  cat + '"';
     return this.query(query);
+  }
+
+  changeEntryCategory(cat: string, subcat: string, id: number) {
+    console.log(cat, id);
   }
 
 }
