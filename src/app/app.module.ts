@@ -10,6 +10,7 @@ import { ItemDetail } from '../pages/itemdetail/itemdetail';
 
 import { EuroPipe } from '../pipes/euro.pipe';
 import { DatePipe } from '../pipes/date.pipe';
+import { MonthPipe } from '../pipes/date.pipe';
 
 import { SQLiteService } from '../services/sqlite.service';
 import { CategoriesService } from '../services/categories.service';
@@ -23,7 +24,8 @@ import { CategoriesService } from '../services/categories.service';
     ListPage,
     ItemDetail,
     EuroPipe,
-    DatePipe
+    DatePipe,
+    MonthPipe
   ],
   imports: [
     IonicModule.forRoot(MyApp, {

@@ -9,12 +9,18 @@ import { ListPage } from '../list/list';
 })
 export class OverviewPage {
 
+  minDate = new Date(2015,9,30);
+  maxDate = new Date(2016, 5, 1);
+
   constructor(public navCtrl: NavController) {
 
   }
 
-  toList(cat) {
-    this.navCtrl.push(ListPage, {category: cat});
+
+
+
+  toList(cat, minDate, maxDate) {
+    this.navCtrl.push(ListPage, {category: cat, minDate: minDate, maxDate: maxDate});
   }
 
 }

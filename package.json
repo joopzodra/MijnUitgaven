@@ -21,6 +21,7 @@
     "@ionic/storage": "1.1.6",
     "d3-array": "^1.0.2",
     "d3-axis": "^1.0.4",
+    "d3-collection": "^1.0.2",
     "d3-format": "^1.0.2",
     "d3-scale": "^1.0.4",
     "d3-selection": "^1.0.3",

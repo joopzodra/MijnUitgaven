@@ -11,7 +11,7 @@
   <ion-list>
     <ion-item>
       <ion-label>Sorteer op: </ion-label>
-      <ion-select [(ngModel)]="sortBy" (ionChange)="sort()">
+      <ion-select [(ngModel)]="sortBy" (ionChange)="sort(results)">
         <ion-option value="date">datum</ion-option>
         <ion-option value="amount">bedrag</ion-option>
       </ion-select>
@@ -24,7 +24,6 @@
       </ion-icon>
       <div class="list-cat-wrapper">
         <p class="list-cat">{{result.category}}</p>  
-        <p class="list-subcat">{{result.subcategory}}</p>
       </div>
       <div>
         <p class="list-date">{{result.date | date}}</p>
