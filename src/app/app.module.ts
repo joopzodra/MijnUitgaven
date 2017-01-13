@@ -3,8 +3,8 @@ import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 
 import { MyApp } from './app.component';
 import { OverviewPage } from '../pages/overview/overview';
-import { OverviewPie } from '../pages/overview/pie/pie';
-import { OverviewLine } from '../pages/overview/line/line';
+import { Pie } from '../pages/overview/pie/pie';
+import { Line } from '../pages/overview/line/line';
 import { ListPage } from '../pages/list/list';
 import { ItemDetail } from '../pages/itemdetail/itemdetail';
 
@@ -14,13 +14,14 @@ import { MonthPipe } from '../pipes/date.pipe';
 
 import { SQLiteService } from '../services/sqlite.service';
 import { CategoriesService } from '../services/categories.service';
+import { DataPushService } from '../services/data-push.service';
 
 @NgModule({
   declarations: [
     MyApp,
     OverviewPage,
-    OverviewPie,
-    OverviewLine,
+    Pie,
+    Line,
     ListPage,
     ItemDetail,
     EuroPipe,
@@ -42,7 +43,8 @@ import { CategoriesService } from '../services/categories.service';
   providers: [
   {provide: ErrorHandler, useClass: IonicErrorHandler},
   SQLiteService,
-  CategoriesService
+  CategoriesService,
+  DataPushService
   ]   
 })
 export class AppModule {}

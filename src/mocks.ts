@@ -1,4 +1,4 @@
-
+//source https://github.com/lathonez/clicker/blob/master/src/mocks.ts
 // IONIC:
 
 export class ConfigMock {

@@ -97,9 +97,9 @@ export class SQLiteService {
 
     this.db = this.win.openDatabase('MijnUitgaven', '1.0', 'database MijnUitgaven', 2 * 1024 * 1024);
     this.db.transaction(tx => {
-      tx.executeSql('CREATE TABLE IF NOT EXISTS entries (entriesId INTEGER PRIMARY KEY, date TEXT, amount REAL, payment_method TEXT, description TEXT, categoryId INTEGER)', [], null, /*(tx, err) => console.log(err.message)*/);
+      tx.executeSql('CREATE TABLE IF NOT EXISTS entries (entryId INTEGER PRIMARY KEY, date TEXT, amount REAL, payment_method TEXT, description TEXT, categoryId INTEGER)', [], null, /*(tx, err) => console.log(err.message)*/);
       data.forEach(row => {
-        tx.executeSql('INSERT INTO entries (entriesId, date, amount, payment_method, description, categoryId) VALUES (?,?,?,?,?,?)', [row[0], row[1], -row[2], row[3], row[4], row[5]], null, /*(tx, err) => console.log(err.message)*/); //row[2] negative because amount is negative and in the list we want to work with positive values
+        tx.executeSql('INSERT INTO entries (entryId, date, amount, payment_method, description, categoryId) VALUES (?,?,?,?,?,?)', [row[0], row[1], -row[2], row[3], row[4], row[5]], null, /*(tx, err) => console.log(err.message)*/); //row[2] negative because amount is negative and in the list we want to work with positive values
       });
       tx.executeSql('CREATE TABLE IF NOT EXISTS categories (catId INTEGER PRIMARY KEY, category TEXT)');
       cats.forEach(row => {

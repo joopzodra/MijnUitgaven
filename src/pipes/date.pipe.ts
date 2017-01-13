@@ -21,6 +21,8 @@ export class DatePipe implements PipeTransform {
 
   transform(value: string): string {
 
+    if (!value) return;
+
     let year = +value.slice(0, 4);
     let month = +value.slice(4,6) - 1;
     let day = +value.slice(6);
@@ -44,6 +46,8 @@ export class MonthPipe implements PipeTransform {
   });
 
   transform(value: string): string {
+
+    if (!value) return;
 
     let year = +value.split('-')[0];
     let month = +value.split('-')[1] - 1; //Ionic datetime string is 1-based but Date object is 0-based

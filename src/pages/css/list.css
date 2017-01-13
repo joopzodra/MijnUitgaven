@@ -1,37 +1,31 @@
-.ion-icon {
+.list-page .ion-icon {
   background-color: green;
   width: 30px;
   height: 30px;
   border-radius: 15px; }
-
-.item {
+.list-page .item {
   padding-left: 6px; }
-
-.list-cat-wrapper {
+.list-page .list-cat-wrapper {
   display: inline-block;
   border-bottom: solid 2px green; }
-  .list-cat-wrapper p {
+  .list-page .list-cat-wrapper p {
     text-transform: uppercase;
     font-size: 1.2rem;
     color: black;
     display: inline; }
-
-p.list-date {
+.list-page p.list-date {
   display: inline-block;
   margin: 6px 0;
   font-style: italic;
   font-size: 1.3rem; }
-
-p.list-pay-meth {
+.list-page p.list-pay-meth {
   display: inline-block;
   margin: 6px 0;
   float: right;
   font-size: 1.1rem; }
-
-p.list-description {
+.list-page p.list-description {
   white-space: normal; }
-
-h3.list-amount {
+.list-page h3.list-amount {
   font-weight: bold; }
 
 /*# sourceMappingURL=list.css.map */

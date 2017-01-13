@@ -1,9 +1,10 @@
 .pie-chart-container {
 
   position: relative;
-  width: 100%;
+  width: 72%;
   height: 0;
-  padding-top: 100%;
+  padding-top: 72%;
+  margin: 0 auto;
 
   svg {
     position: absolute;
@@ -12,3 +13,30 @@
   }
 }
 
+.pie-list {
+
+  .item-block {
+    min-height: 3.4rem;
+  }
+
+  .ion-icon {
+    width: 16px;
+    height: 16px;
+    border-radius: 8px;
+    min-height: 0;
+    min-width: 0 !important;
+  }
+
+  .label-ios {
+    margin: 13px 10px 7px 0;
+  }
+
+  .list-cat {
+    display: inline-block;
+  }
+
+  .list-amount {
+    font-weight: bold;
+    float: right;
+  }  
+}

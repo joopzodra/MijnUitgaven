@@ -30,7 +30,7 @@ import { ListPage } from '../../list/list';
   }
   `]
 })
-export class OverviewLine {
+export class Line {
 
   data = [8, 15, 16, 23, 42, 14, 8, 15, 16, 23, 42, 14 ];
   colors = ['#A60F2B', '#648C85', '#B3F2C9', '#528C18', '#C3F25C'];
