@@ -68,7 +68,8 @@ export class Pie {
       .then(() => {
         this.createDetachedPie();
         this.setPathsData();
-      });
+      })
+      .then(() => console.log('this.data: ', this.data));
   }
 
   //cat must be string in format like '(1)' or '(3,6,8,9)' etc.
@@ -81,7 +82,7 @@ export class Pie {
       .then(response => {
         return this.data = d3Collection.nest()
           .key(dbRowsJoined => dbRowsJoined['categoryId'])
-          .rollup(arrayCategoryDbRowsJoined => <any>d3Array.sum(arrayCategoryDbRowsJoined.map(obj => obj['amount'])))
+          .rollup(arrayCategoryDbRowsJoined => <any>d3Array.sum(arrayCategoryDbRowsJoined.map(obj => -obj['amount'])))//row[2] negative because amount is negative and in the list we want to work with positive values
           .entries(response)
           .sort((a, b) => d3Array.descending(a.value, b.value));
       });
@@ -109,7 +110,7 @@ export class Pie {
       .enter()
       .append('customPie')
       .attr('class', 'path')
-      .attr('d', <any>arc)
+      .attr('d', (d) => {console.log('arc: ', arc(<any>d) ); return <any>arc(<any>d) })
       .attr('fill', (d, i) => colors[dataKeys[i]]);
   }
 
@@ -118,11 +119,15 @@ export class Pie {
     let that = this;
     that.paths = [];
 
-    elements.each(function(d, i) {
+    elements.each(function(data, i) {
       var node = d3.select(this);
 
       that.paths[i] = { d: node.attr('d'), fill: node.attr('fill') };
     })
+  }
+
+  toList(catId) {
+
   }
 
 }

@@ -18,7 +18,7 @@
 <!-- <button class="to-list" (click)="refreshCategories()">sent refresh request</button>
  -->
   <ion-list class="pie-list" *ngIf="data&&cats">
-    <ion-item *ngFor="let item of data" detail-push>
+    <ion-item *ngFor="let item of data" detail-push (click)="toList(item.key)">
       <ion-icon item-left class="ion-icon" [style.background-color]="colorTable[item.key]">
       </ion-icon>
       <p class="list-cat">{{cats[item.key]}}</p>  

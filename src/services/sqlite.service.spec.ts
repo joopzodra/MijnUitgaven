@@ -17,7 +17,7 @@ describe('SQLiteService', () => {
       tx.executeSql('DROP TABLE entries');
       tx.executeSql('CREATE TABLE entries (entryId INTEGER PRIMARY KEY, date TEXT, amount REAL, payment_method TEXT, description TEXT, categoryId INTEGER)', [], null, (tx, err) => console.log(err.message));
       data.slice(0, 150).forEach(row => {
-        tx.executeSql('INSERT INTO entries (entryId, date, amount, payment_method, description, categoryId) VALUES (?,?,?,?,?,?)', [row[0], row[1], -row[2], row[3], row[4], row[5]], //row[2] negative because amount is negative and in the list we want to work with positive values
+        tx.executeSql('INSERT INTO entries (entryId, date, amount, payment_method, description, categoryId) VALUES (?,?,?,?,?,?)', [row[0], row[1], row[2], row[3], row[4], row[5]],
           done(), (tx, err) => console.log(err.message));
       });
       tx.executeSql('DROP TABLE categories');
