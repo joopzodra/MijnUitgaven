@@ -1,6 +1,6 @@
 <ion-item>
   <ion-datetime displayFormat="MMMM YYYY" pickerFormat="MMMM YYYY" min="2015-06-01" max="2016-05-31" monthNames="januari,februari,maart,april,mei,juni,juli,augustus,september,oktober,november,december" cancelText="Annuleer" doneText="OK" [(ngModel)]="month" (ionChange)="refreshPie(month)"></ion-datetime>
-  <ion-icon item-right name="arrow-down"></ion-icon>
+  <ion-icon item-content name="arrow-down"></ion-icon>
 </ion-item>
 
 <div class="pie-chart-container" #chart>
@@ -23,5 +23,6 @@
       </ion-icon>
       <p class="list-cat">{{cats[item.key]}}</p>  
       <h3 class="list-amount">{{item.value | euro}}</h3>
+      <ion-icon item-right name="arrow-forward"></ion-icon>
     </ion-item>
   </ion-list>

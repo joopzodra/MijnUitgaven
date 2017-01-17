@@ -27,8 +27,12 @@
     min-width: 0 !important;
   }
 
-  .label-ios {
+/*   .label-ios {
     margin: 13px 10px 7px 0;
+  } */
+
+  .label-md {
+    margin-bottom: 9px;
   }
 
   .list-cat {
@@ -38,5 +42,11 @@
   .list-amount {
     font-weight: bold;
     float: right;
-  }  
+  }
+
+  ion-icon[name='arrow-forward'] {
+    color: $lightgrey;
+    margin-left: 16px;
+  }
 }
+
