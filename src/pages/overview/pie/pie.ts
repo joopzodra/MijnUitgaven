@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { NavController } from 'ionic-angular';
 import { Subscription } from 'rxjs/Subscription';
 import * as d3 from 'd3-selection';
 import * as d3Shape from 'd3-shape';
@@ -10,6 +11,8 @@ import * as d3Format from 'd3-format';
 import { SQLiteService } from '../../../services/sqlite.service';
 import { DataPushService } from '../../../services/data-push.service';
 import { colors } from '../../../assets/chartcolors';
+import { ListPage } from '../../list/list';
+import { DbRowsJoined } from '../../../datatypes/dbRowsJoined';
 
 /*
 * NB cat and cats is used as shorthand for category respectively categories
@@ -32,7 +35,9 @@ export class Pie {
 
   private month: string //Ionic datetime string
 
-  private data: { key: string, value: number }[];
+  private data: DbRowsJoined[];
+  private rolledUpData: { key: string, value: number }[];
+  private monthTotal: number;
   private allCats = '(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19)'; //the database contains 18 categories
 
   private margin = { top: 20, bottom: 20, left: 20, right: 20 };
@@ -44,23 +49,12 @@ export class Pie {
   cats: {};
   private colorTable = colors;
 
-  private pushCategories: Subscription;
-
-
-  constructor(private sqlite: SQLiteService, private dataPush: DataPushService) { }
+  constructor(private navCtrl: NavController, private sqlite: SQLiteService, private dataPush: DataPushService) { }
 
   ngOnInit() {
     this.month = this.ionicPreviousMonth;
     this.refreshPie(this.month);
     this.sqlite.getCategories().then(cats => this.cats = cats);
-
-
-    this.dataPush.pushCategories$.subscribe(() => {
-      this.sqlite.getCategories().then(cats => this.cats = cats);
-
-      console.log('de lijst verversen');
-
-    })
   }
 
   refreshPie(month) {
@@ -68,35 +62,32 @@ export class Pie {
       .then(() => {
         this.createDetachedPie();
         this.setPathsData();
-      })
-      .then(() => console.log('this.data: ', this.data));
+      });
   }
 
   //cat must be string in format like '(1)' or '(3,6,8,9)' etc.
-  getData(cat, month): Promise<{ key: string, value: number }[]> {
+  getData(cat, month) {
 
     let minDate = new Date(+month.split('-')[0], +month.split('-')[1] - 1); //minus 1 because Date object is 0-based
     let maxDate = d3Time.timeMonth.offset(minDate, 1);
 
-    return this.sqlite.getByCatAndDate(cat, minDate, maxDate)
-      .then(response => {
-        return this.data = d3Collection.nest()
-          .key(dbRowsJoined => dbRowsJoined['categoryId'])
-          .rollup(arrayCategoryDbRowsJoined => <any>d3Array.sum(arrayCategoryDbRowsJoined.map(obj => -obj['amount'])))//row[2] negative because amount is negative and in the list we want to work with positive values
-          .entries(response)
-          .sort((a, b) => d3Array.descending(a.value, b.value));
-      });
-  }
+    let data = this.sqlite.getByCatAndDate(cat, minDate, maxDate)
+      .then(response => this.data = response);
 
-//TEMP >>> weghalen straks
-  refreshCategories(){
-    this.dataPush.pushCategoriesSource.next(1);
+    return data.then(data => {
+      return this.rolledUpData = d3Collection.nest()
+        .key(dbRowsJoined => dbRowsJoined['categoryId'])
+        .rollup(arrayCategoryDbRowsJoined => <any>d3Array.sum(arrayCategoryDbRowsJoined.map(obj => -obj['amount'])))//row[2] negative because amount is negative and in the list we want to work with positive values
+        .entries(data)
+        .sort((a, b) => d3Array.descending(a.value, b.value));
+    })
+      .then(rolledUpData => this.monthTotal = rolledUpData.reduce((a, b) => a + b.value, 0));
   }
 
   createDetachedPie() {
 
-    let dataKeys = this.data.map(dataObj => dataObj.key);
-    let dataValues = this.data.map(dataObj => dataObj.value);
+    let dataKeys = this.rolledUpData.map(dataObj => dataObj.key);
+    let dataValues = this.rolledUpData.map(dataObj => dataObj.value);
 
     let arcs = d3Shape.pie()(dataValues);
     let arc = d3Shape.arc()
@@ -110,7 +101,7 @@ export class Pie {
       .enter()
       .append('customPie')
       .attr('class', 'path')
-      .attr('d', (d) => {console.log('arc: ', arc(<any>d) ); return <any>arc(<any>d) })
+      .attr('d', <any>arc)
       .attr('fill', (d, i) => colors[dataKeys[i]]);
   }
 
@@ -127,7 +118,8 @@ export class Pie {
   }
 
   toList(catId) {
-
+    let catData = this.data.filter(item => item.catId === +catId);
+    this.navCtrl.push(ListPage, { catData, catId });
   }
 
 }

@@ -11,7 +11,7 @@
   <ion-list>
     <ion-item>
       <ion-label>Sorteer op: </ion-label>
-      <ion-select [(ngModel)]="sortBy" (ionChange)="sort(results)">
+      <ion-select [(ngModel)]="sortBy" (ionChange)="sort()">
         <ion-option value="date">datum</ion-option>
         <ion-option value="amount">bedrag</ion-option>
       </ion-select>
@@ -19,18 +19,17 @@
   </ion-list>  
 
   <ion-list>
-    <ion-item *ngFor="let result of results" (click)="itemSelected(result)" detail-push>
-      <ion-icon item-left class="ion-icon">
+    <ion-item *ngFor="let item of data" (click)="itemSelected(item)">
+      <ion-icon item-left [style.background-color]="colorTable[catId]">
       </ion-icon>
-      <div class="list-cat-wrapper">
-        <p class="list-cat">{{result.category}}</p>  
-      </div>
+      <p class="list-cat">{{item.category}}</p>  
       <div>
-        <p class="list-date">{{result.date | date}}</p>
-        <p class="list-pay-meth">{{result.payment_method}}</p>
+        <p class="list-date">{{item.date | date}}</p>
+        <p class="list-pay-meth">{{item.payment_method}}</p>
       </div>
-      <p class="list-description">{{result.description}}</p>
-      <h3 class="list-amount">{{result.amount | euro}}</h3>
+      <p class="list-description">{{item.description}}</p>
+      <h3 class="list-amount">{{-item.amount | euro}}</h3>
+      <ion-icon item-right name="arrow-forward"></ion-icon>
     </ion-item>
   </ion-list>
 

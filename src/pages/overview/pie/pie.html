@@ -1,7 +1,10 @@
-<ion-item>
-  <ion-datetime displayFormat="MMMM YYYY" pickerFormat="MMMM YYYY" min="2015-06-01" max="2016-05-31" monthNames="januari,februari,maart,april,mei,juni,juli,augustus,september,oktober,november,december" cancelText="Annuleer" doneText="OK" [(ngModel)]="month" (ionChange)="refreshPie(month)"></ion-datetime>
-  <ion-icon item-content name="arrow-down"></ion-icon>
-</ion-item>
+<div class="pie-month-amount">
+  <ion-item>
+    <ion-datetime displayFormat="MMMM YYYY" pickerFormat="MMMM YYYY" min="2015-06-01" max="2016-05-31" monthNames="januari,februari,maart,april,mei,juni,juli,augustus,september,oktober,november,december" cancelText="Annuleer" doneText="OK" [(ngModel)]="month" (ionChange)="refreshPie(month)"></ion-datetime>
+    <ion-icon item-content name="arrow-down"></ion-icon>
+    <ion-icon item-right><p>totaal uitgegeven: </p><h3 *ngIf="monthTotal">{{monthTotal | euro}}</h3></ion-icon>
+  </ion-item>
+</div>
 
 <div class="pie-chart-container" #chart>
 
@@ -10,19 +13,19 @@
     <g [attr.transform]="'translate(' + (width/2 + margin.left) + ',' + (height/2 + margin.top) + ')'">
 
       <path *ngFor="let path of paths" [attr.d]="path.d" [attr.fill]="path.fill" ></path>
-    
+
     </g>
   </svg>
 </div>
 
 <!-- <button class="to-list" (click)="refreshCategories()">sent refresh request</button>
- -->
-  <ion-list class="pie-list" *ngIf="data&&cats">
-    <ion-item *ngFor="let item of data" detail-push (click)="toList(item.key)">
-      <ion-icon item-left class="ion-icon" [style.background-color]="colorTable[item.key]">
-      </ion-icon>
-      <p class="list-cat">{{cats[item.key]}}</p>  
-      <h3 class="list-amount">{{item.value | euro}}</h3>
-      <ion-icon item-right name="arrow-forward"></ion-icon>
-    </ion-item>
-  </ion-list>
+-->
+<ion-list class="pie-list" *ngIf="rolledUpData&&cats">
+  <ion-item *ngFor="let item of rolledUpData" (click)="toList(item.key)">
+    <ion-icon item-left class="ion-icon" [style.background-color]="colorTable[item.key]">
+    </ion-icon>
+    <p class="list-cat">{{cats[item.key]}}</p>  
+    <h3 class="list-amount">{{item.value | euro}}</h3>
+    <ion-icon item-right name="arrow-forward"></ion-icon>
+  </ion-item>
+</ion-list>

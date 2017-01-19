@@ -13,7 +13,6 @@ import { DatePipe } from '../pipes/date.pipe';
 import { MonthPipe } from '../pipes/date.pipe';
 
 import { SQLiteService } from '../services/sqlite.service';
-import { CategoriesService } from '../services/categories.service';
 import { DataPushService } from '../services/data-push.service';
 
 @NgModule({
@@ -43,7 +42,6 @@ import { DataPushService } from '../services/data-push.service';
   providers: [
   {provide: ErrorHandler, useClass: IonicErrorHandler},
   SQLiteService,
-  CategoriesService,
   DataPushService
   ]   
 })

@@ -1,47 +1,59 @@
 import { Component, OnInit } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
-import { Observable } from 'rxjs';
+import { Subscription } from 'rxjs/Subscription';
 
-import { SQLiteService } from '../../services/sqlite.service';
+import { colors } from '../../assets/chartcolors';
 import { ItemDetail } from '../itemdetail/itemdetail';
+import { DbRowsJoined } from '../../datatypes/dbRowsJoined';
+import { DataPushService } from '../../../services/data-push.service';
 
 @Component({
   selector: 'page-list',
   templateUrl: 'list.html'
 })
+
 export class ListPage implements OnInit {
 
-  results = [];
-  sortBy: string;
+  private data: DbRowsJoined[];
+  private catId: string;
+  private sortBy: string;
+  private colorTable = colors;
+  private pushCategories: Subscription;
 
-  constructor(private navCtrl: NavController, private navParams: NavParams, public sqlite: SQLiteService ) { }
 
-  ngOnInit(): void {
-    let category = this.navParams.get('category');
-    let minDate = this.navParams.get('minDate');
-    let maxDate = this.navParams.get('maxDate');
-    this.getByCatAndDate(category, minDate, maxDate);
+  constructor(private navCtrl: NavController, private navParams: NavParams ) { }
+
+  ngOnInit() {
     this.sortBy = 'date';
-  }
-
-  getByCatAndDate(category, minDate, maxDate): Promise<any> {
-    return this.sqlite.getByCatAndDate(category, minDate, maxDate)
-    .then(response => this.results = this.sort(response));
+    this.catId = this.navParams.get('catId').toString();
+    this.data = this.navParams.get('catData');
+    this.data.sort(this.sortByDateThenAmount);
   }
 
 /*  requestStreamCatAndDate(category, minDate, maxDate): void {
     this.sqlite.requestStreamCatAndDate(category, minDate, maxDate);
   }*/
 
-  setResults(sqlResponse): void {
-      let length = sqlResponse.res.rows.length;
-      for (let i = 0; i < length; i++) {
-        this.results.push(sqlResponse.res.rows.item(i));
-      };
+
+  sort() {
+      if (this.sortBy === 'date') {
+        this.data.sort(this.sortByDateThenAmount);
+      }
+      if (this.sortBy === 'amount') {
+        this.data.sort(this.sortByAmountThenDate);
+      }
   }
 
-  sort(arr) {
-    return arr.sort((a, b) => b[this.sortBy] - a[this.sortBy]);
+  sortByDateThenAmount(a: DbRowsJoined, b: DbRowsJoined) {
+
+    return a.date < b.date ? 1 : a.date > b.date ? -1 :
+      a.amount < b.amount ? 1 : a.amount > b.amount ? -1 : 0;
+  }
+
+  sortByAmountThenDate(a: DbRowsJoined, b: DbRowsJoined) {
+
+    return a.amount < b.amount ? -1 : a.amount > b.amount ? 1 :
+        a.date < b.date ? 1 : a.date > b.date ? -1 : 0;
   }
 
   itemSelected(result) {

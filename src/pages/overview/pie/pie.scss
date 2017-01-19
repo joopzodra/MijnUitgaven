@@ -1,3 +1,15 @@
+.pie-month-amount {
+
+  ion-icon[name='arrow-down'] {
+    color: $lightgrey;
+  }
+
+  h3 {
+    display: inline-block;
+    font-weight: bold;
+  }
+}
+
 .pie-chart-container {
 
   position: relative;
@@ -27,10 +39,6 @@
     min-width: 0 !important;
   }
 
-/*   .label-ios {
-    margin: 13px 10px 7px 0;
-  } */
-
   .label-md {
     margin-bottom: 9px;
   }
@@ -49,4 +57,3 @@
     margin-left: 16px;
   }
 }
-

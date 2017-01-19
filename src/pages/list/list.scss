@@ -1,48 +1,52 @@
 .list-page {
 
-  .ion-icon {
-    background-color: green;
-    width: 30px;
-    height: 30px;
-    border-radius: 15px;
+  ion-icon {
+    width: 16px;
+    height: 16px;
+    border-radius: 8px;
+    min-height: 0;
+    min-width: 0 !important;
   }
 
   .item {
     padding-left: 6px;
   }
 
-  .list-cat-wrapper {
+  .list-cat {
+    text-transform: uppercase;
+    font-size: 1.2rem;
+    color: black;
     display: inline-block;
-    border-bottom: solid 2px green;
-
-    p {
-      text-transform: uppercase;
-      font-size: 1.2rem;
-      color: black;
-      display: inline;
-    }
+    margin-bottom: 0;
   }
+
 
   p.list-date {
     display: inline-block;
-    margin: 6px 0;
+    margin-bottom: 6px;
     font-style: italic;
     font-size: 1.3rem;
   }
 
   p.list-pay-meth {
     display: inline-block;
-    margin: 6px 0;
+    margin-bottom: 6px;
     float: right;
     font-size: 1.1rem;
   }
 
   p.list-description {
     white-space: normal;
+    font-size: 1.2rem;
   }
 
   h3.list-amount {
     font-weight: bold;
+  }
+
+  ion-icon[name='arrow-forward'] {
+    color: $lightgrey;
+    margin-left: 16px;
   }
 
 }
