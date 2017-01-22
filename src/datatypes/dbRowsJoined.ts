@@ -1,5 +1,5 @@
 export interface DbRowsJoined {
-  entriesId: number,
+  entryId: number,
   date: string,
   amount: number,
   payment_method: string,

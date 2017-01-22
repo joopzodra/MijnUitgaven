@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Subject } from 'rxjs';
 
 import { entriesCsv } from '../assets/entries-csv';
 import { categoriesCsv } from '../assets/categories-csv';
@@ -14,6 +14,8 @@ export class SQLiteService {
 
   win: any = window;
   db: any;
+  entryChangedSource = new Subject<{ date: string, categoryId: number }>();
+  categoryChangedSource = new Subject<number>();
 
   constructor() {
     if (this.win.sqlitePlugin) {
@@ -49,24 +51,35 @@ export class SQLiteService {
       .then(sqlResponse => this.sqlResponseToArray(sqlResponse));
   }
 
-  getCategories() {
+  getCategories(): Promise<{[x: number]: string}> {
 
     let query = 'SELECT * FROM categories';
-    
+
     return this.query(query)
       .then(sqlResponse => {
         let catObj = {};
         let length = sqlResponse.res.rows.length;
-      for (let i = 0; i < length; i++) {
-        let item = sqlResponse.res.rows.item(i);
-        catObj[item.catId] = item.category;
-      }
-      return catObj;        
+        for (let i = 0; i < length; i++) {
+          let item = sqlResponse.res.rows.item(i);
+          catObj[item.catId] = item.category;
+        }
+        return catObj;
       })
   }
 
-  changeEntryCategory(cat: string, subcat: string, id: number) {
-    console.log(cat, id);
+  changeEntry(entryId: number, date: string, description: string, categoryId: number): void {
+    
+    let query = ['UPDATE entries SET description="', description, '", categoryId=', categoryId, ' WHERE entryId=', entryId].join('');
+    this.query(query)
+      .then(sqlResponse => {
+        this.entryChangedSource.next({ date: date, categoryId: categoryId });
+        return sqlResponse;
+      });
+  }
+
+  changeCategory(catId: number, category: string): void {
+    //query(....); hier de query
+    this.categoryChangedSource.next(catId);
   }
 
   private stringToDate(dateString: string) {
