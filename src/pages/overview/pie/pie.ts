@@ -7,10 +7,9 @@ import * as d3Time from 'd3-time';
 import * as d3Collection from 'd3-collection';
 import * as d3Array from 'd3-array';
 import * as d3Format from 'd3-format';
-import { Subject } from 'rxjs';
-import { BehaviorSubject } from 'rxjs';
 
 import { SQLiteService } from '../../../services/sqlite.service';
+import { DataPushService } from '../../../services/data-push.service';
 import { colors } from '../../../assets/chartcolors';
 import { ListPage } from '../../list/list';
 import { DbRowsJoined } from '../../../datatypes/dbRowsJoined';
@@ -36,7 +35,7 @@ export class Pie {
 
   private month: string //Ionic datetime string
 
-  private dataSource = new BehaviorSubject<DbRowsJoined[]>([]);
+  private data: DbRowsJoined[];
   private rolledUpData: { key: string, value: number }[];
   private monthTotal: number;
   private allCats = '(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19)'; //the database contains 18 categories
@@ -50,29 +49,15 @@ export class Pie {
   cats: {};
   private colorTable = colors;
 
-  constructor(private navCtrl: NavController, private sqlite: SQLiteService) { }
+  constructor(private navCtrl: NavController, private sqlite: SQLiteService, private dataPush: DataPushService) { }
 
   ngOnInit() {
     this.month = this.ionicPreviousMonth;
-    this.refreshDataAndPie(this.month);
+    this.refreshPie(this.month);
     this.sqlite.getCategories().then(cats => this.cats = cats);
-
-    this.sqlite.entryChangedSource.subscribe(x => {
-      if (this.month === [x.date.slice(0, 4), x.date.slice(4, 6)].join('-')) {
-        this.refreshDataAndPie(this.month);
-      }
-    },
-      error => console.log('error: ' + error.message)
-    );
-
-    this.sqlite.categoryChangedSource.subscribe( x => {
-        this.refreshDataAndPie(this.month);
-      },
-      error => console.log('error: ' + error.message)
-    );
   }
 
-  refreshDataAndPie(month) {
+  refreshPie(month) {
     this.getData(this.allCats, month)
       .then(() => {
         this.createDetachedPie();
@@ -87,16 +72,12 @@ export class Pie {
     let maxDate = d3Time.timeMonth.offset(minDate, 1);
 
     let data = this.sqlite.getByCatAndDate(cat, minDate, maxDate)
-      .then(response => {
-        this.dataSource.next(response);
-        return response;
-      });
+      .then(response => this.data = response);
 
     return data.then(data => {
       return this.rolledUpData = d3Collection.nest()
         .key(dbRowsJoined => dbRowsJoined['categoryId'])
         .rollup(arrayCategoryDbRowsJoined => <any>d3Array.sum(arrayCategoryDbRowsJoined.map(obj => -obj['amount'])))//row[2] negative because amount is negative and in the list we want to work with positive values
-        //.rollup(function(leaves) { return {"length": leaves.length, "total_time": d3.sum(leaves, function(d) {return parseFloat(d.time);})} })
         .entries(data)
         .sort((a, b) => d3Array.descending(a.value, b.value));
     })
@@ -137,11 +118,8 @@ export class Pie {
   }
 
   toList(catId) {
-    let dataSource = this.dataSource;
-    this.navCtrl.push(ListPage, { dataSource, catId });
+    let catData = this.data.filter(item => item.catId === +catId);
+    this.navCtrl.push(ListPage, { catData, catId });
   }
 
-  changeEntry() {
-    this.sqlite.changeEntry(474, "20160429", "een nieuwe beschrijving", 2);
-  }
 }

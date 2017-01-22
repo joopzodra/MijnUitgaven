@@ -1,5 +1,4 @@
 import { NgModule, ErrorHandler } from '@angular/core';
-import { FormsModule }   from '@angular/forms';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 
 import { MyApp } from './app.component';
@@ -14,6 +13,7 @@ import { DatePipe } from '../pipes/date.pipe';
 import { MonthPipe } from '../pipes/date.pipe';
 
 import { SQLiteService } from '../services/sqlite.service';
+import { DataPushService } from '../services/data-push.service';
 
 @NgModule({
   declarations: [
@@ -30,8 +30,7 @@ import { SQLiteService } from '../services/sqlite.service';
   imports: [
     IonicModule.forRoot(MyApp, {
       backButtonText: 'Terug'
-    }),
-    FormsModule
+    })
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -43,6 +42,7 @@ import { SQLiteService } from '../services/sqlite.service';
   providers: [
   {provide: ErrorHandler, useClass: IonicErrorHandler},
   SQLiteService,
+  DataPushService
   ]   
 })
 export class AppModule {}

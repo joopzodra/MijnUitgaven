@@ -20,7 +20,7 @@
 
   <ion-list>
     <ion-item *ngFor="let item of data" (click)="itemSelected(item)">
-      <ion-icon item-left [style.background-color]="colorTable[item.catId]">
+      <ion-icon item-left [style.background-color]="colorTable[catId]">
       </ion-icon>
       <p class="list-cat">{{item.category}}</p>  
       <div>
