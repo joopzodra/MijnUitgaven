@@ -6,47 +6,48 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content padding class="itemdetails">
+<ion-content class="itemdetails">
 
-  <ion-list>
+  <ion-card *ngIf="item">
+    <ion-card-content class="itemdetails-outer">
 
-    <ion-list-header>
-      Rubriek of subrubriek veranderen
-    </ion-list-header>
+      <div class="icon-container">
+      <ion-icon *ngIf="categories" item-left [style.background-color]="colorTable[item.catId]">
+        </ion-icon>
+      </div>
+      <div class="itemdetails-inner">
+        <p *ngIf="categories" class="itemdetail-cat">{{categories[item.catId] | uppercase}}</p>  
+        <div>
+          <p class="itemdetail-date">{{item.date | date}}</p>
+          <p class="itemdetail-pay-meth">{{item.payment_method}}</p>
+        </div>
+        <p class="itemdetail-description">{{item.description}}</p>
+        <h3 class="itemdetail-amount">{{-item.amount | euro}}</h3>
+      </div>
 
-    <ion-item *ngFor="let cat of subcategories | async" >{{cat.cat}}
-
-      <ion-list >
-      <ion-item *ngFor="let subcat of cat.subcats">{{subcat}}</ion-item>
-      </ion-list>
-    
-    </ion-item>
-
-
-    <ion-item>
-      <button ion-button clear color="dark" class="select-button">Ik vind geen passende (sub)rubriek</button>
-    </ion-item>
-
-  </ion-list>
+    </ion-card-content>
+  </ion-card>
 
   <ion-card>
-
-    <ion-card-header>
-      {{item.amount | euro}}
-    </ion-card-header>
-
     <ion-card-content>
-      <p>Rubriek:</p>
-      <p>{{item.category | uppercase}}</p>
-      <p>Subrubriek:</p>      
-      <p>{{item.subcategory | uppercase}}</p>
-      <div class="item-info">
-        <p>{{item.date | date }}</p>
-        <p>{{item.payment_method | uppercase }}</p>
-        <p class="item-description">{{item.description}}</p>
-      </div>
-    </ion-card-content>
 
-  </ion-card>
+      <form (ngSubmit)="onSubmit(itemDetailForm)" #itemDetailForm="ngForm">
+       <div *ngIf="categories">
+        <ion-label color="primary">Wijzig rubriek: </ion-label>
+        <ion-select [(ngModel)]="item.catId" name="itemCatId" cancelText="annuleer">        
+          <ion-option *ngFor="let catKey of catKeys" [value]=catKey>{{categories[catKey]}} </ion-option>
+        </ion-select>
+      </div> 
+
+      <ion-label color="primary">Wijzig omschrijving:</ion-label>
+      <ion-textarea rows="8" [(ngModel)]="item.description" name="itemDescription"></ion-textarea>
+
+      <button ion-button type="submit" [disabled]="itemDetailForm.form.pristine">Opslaan</button>
+      <button ion-button [disabled]="itemDetailForm.form.pristine" (click)="cancel(itemDetailForm)">Annuleer</button>
+    </form>
+
+
+  </ion-card-content>
+</ion-card>
 
 </ion-content>

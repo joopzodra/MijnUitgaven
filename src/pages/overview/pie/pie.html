@@ -1,6 +1,6 @@
 <div class="pie-month-amount">
   <ion-item>
-    <ion-datetime displayFormat="MMMM YYYY" pickerFormat="MMMM YYYY" min="2015-06-01" max="2016-05-31" monthNames="januari,februari,maart,april,mei,juni,juli,augustus,september,oktober,november,december" cancelText="Annuleer" doneText="OK" [(ngModel)]="month" (ionChange)="refreshPie(month)"></ion-datetime>
+    <ion-datetime displayFormat="MMMM YYYY" pickerFormat="MMMM YYYY" min="2015-06-01" max="2016-05-31" monthNames="januari,februari,maart,april,mei,juni,juli,augustus,september,oktober,november,december" cancelText="Annuleer" doneText="OK" [(ngModel)]="month" (ionChange)="refreshDataAndPie(month)"></ion-datetime>
     <ion-icon item-content name="arrow-down"></ion-icon>
     <ion-icon item-right><p>totaal uitgegeven: </p><h3 *ngIf="monthTotal">{{monthTotal | euro}}</h3></ion-icon>
   </ion-item>
@@ -18,8 +18,10 @@
   </svg>
 </div>
 
-<!-- <button class="to-list" (click)="refreshCategories()">sent refresh request</button>
--->
+ <button class="change-cat" (click)="changeCat()">sent refresh categories</button>
+ <button class="change-entry" (click)="changeEntry()">sent refresh entry</button>
+
+
 <ion-list class="pie-list" *ngIf="rolledUpData&&cats">
   <ion-item *ngFor="let item of rolledUpData" (click)="toList(item.key)">
     <ion-icon item-left class="ion-icon" [style.background-color]="colorTable[item.key]">

@@ -1,18 +1,54 @@
-ion-content.itemdetails {
-  background-color: #ddd;
-}
 
 .itemdetails {
-  .item-info {
-    margin-top: 15px;
 
-    p {
-        font-size: 1.2rem;
-    }
+  background-color: #ddd;
+
+  .itemdetails-outer {
+    display: -webkit-flex;
+    display: flex;
   }
-  .item-description {
-    margin-top: 15px;
+
+  .icon-container {
+    margin: 3px 15px 0 0;
+  }
+
+  ion-icon {
+    width: 16px;
+    height: 16px;
+    border-radius: 8px;
+    min-height: 0;
+    min-width: 0 !important;
+  }
+
+  .itemdetail-cat {
+    font-size: 1.2rem;
+    color: black;
+    display: inline-block;
+    margin-bottom: 0;
+  }
+
+
+  p.itemdetail-date {
+    display: inline-block;
+    margin-bottom: 6px;
+    font-style: italic;
+    font-size: 1.3rem;
+  }
+
+  p.itemdetail-pay-meth {
+    display: inline-block;
+    margin-bottom: 6px;
+    float: right;
+    font-size: 1.1rem;
+  }
+
+  p.itemdetail-description {
+    white-space: normal;
+    font-size: 1.2rem;
+  }
+
+  h3.itemdetail-amount {
+    font-weight: bold;
   }
 
 }
-

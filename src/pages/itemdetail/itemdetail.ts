@@ -3,6 +3,8 @@ import { NavController, NavParams, AlertController } from 'ionic-angular';
 
 import { ListPage } from '../list/list';
 import { SQLiteService } from '../../services/sqlite.service';
+import { DbRowsJoined } from '../../datatypes/dbRowsJoined';
+import { colors } from '../../assets/chartcolors';
 
 @Component({
   selector: 'itemdetail',
@@ -11,41 +13,38 @@ import { SQLiteService } from '../../services/sqlite.service';
 
 export class ItemDetail implements OnInit {
 
-  item = this.navParams.data;
-  category: string;
-  subcategory: string;
-  categories: Promise<string[]>;
+  private item: DbRowsJoined;
+  private categories: {[x: number]: string};
+  private catKeys: string[];
+  private colorTable = colors;
+  private storedCatId: number;
+  private storedDescription: string;
 
   constructor(private navCtrl: NavController, private navParams: NavParams, private sqlite: SQLiteService, public alertCtrl: AlertController) { }
 
   ngOnInit() {
-    this.category = this.item.category;
-  }
- 
-  catChange() {
-    this.sqlite.changeEntryCategory(this.category, this.subcategory, this.item.id )
-    //this.navCtrl.push(ListPage, {category: this.category});
-  }
 
-  catCancel() {
+    let entryId = this.navParams.get('entryId');
+    this.navParams.get('dataSource').subscribe(data => {
+      this.item = data.filter(item => item.entryId === +entryId)[0];
+      this.storedCatId = this.item.catId;
+      this.storedDescription = this.item.description;
+    });
 
-  }
-
-  renameCategory(cat) {
-    console.log(cat)
-    this.category = cat;
+    this.sqlite.getCategories()
+      .then(catObj => {
+        this.categories = catObj;
+        this.catKeys = Object.keys(catObj)
+      });
   }
 
-  addCategory(cat) {
-
+  onSubmit(form) {
+    this.sqlite.changeEntry(this.item.entryId, this.item.date, this.item.description, this.item.catId);
+    form.resetForm({itemCatId: this.item.catId, itemDescription: this.item.description});     
   }
 
-  renameSubcategory(subcat) {
-
-  }
-
-  addSubcategory(subcat) {
-
+  cancel(form) {
+    form.resetForm({itemCatId: this.storedCatId, itemDescription: this.storedDescription});    
   }
 
 }

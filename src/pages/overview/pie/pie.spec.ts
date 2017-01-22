@@ -7,7 +7,6 @@ import { Pie } from './pie';
 import { MonthPipe } from '../../../pipes/date.pipe';
 import { EuroPipe } from '../../../pipes/euro.pipe';
 import { SQLiteService } from '../../../services/sqlite.service';
-import { DataPushService } from '../../../services/data-push.service';
 import { entriesCsv } from '../../../assets/entries-csv';
 import { categoriesCsv } from '../../../assets/categories-csv';
 import { DbRowsJoined } from '../../../datatypes/dbRowsJoined';
@@ -18,7 +17,6 @@ describe('Pie', () => {
   let comp: Pie;
   let fixture: ComponentFixture<Pie>;
   let sqlService: SQLiteService;
-  let dataPushService: DataPushService;
 
   class MockSQLiteService {
 
@@ -53,18 +51,6 @@ describe('Pie', () => {
     }
   }
 
-  class MockDataPushService {
-
-    pushCategoriesSource(num) {
-      return true;
-    }
-
-    pushCategories$ = {
-      subscribe: () => true
-    };
-
-  }
-
   beforeEach(async(() => {
 
     TestBed.configureTestingModule({
@@ -79,8 +65,7 @@ describe('Pie', () => {
         { provide: NavController, useClass: NavMock },
         { provide: Platform, useClass: PlatformMock },
         { provide: DomController, useClass: DomControllerMock },
-        { provide: SQLiteService, useClass: MockSQLiteService },
-        { provide: DataPushService, useClass: MockDataPushService }
+        { provide: SQLiteService, useClass: MockSQLiteService }
       ],
       imports: [IonicModule],
     })
@@ -90,7 +75,6 @@ describe('Pie', () => {
     fixture = TestBed.createComponent(Pie);
     comp = fixture.componentInstance;
     sqlService = fixture.debugElement.injector.get(SQLiteService);
-    dataPushService = fixture.debugElement.injector.get(DataPushService);
 
   });
 
