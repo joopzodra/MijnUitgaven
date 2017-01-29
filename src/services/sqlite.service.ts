@@ -30,28 +30,31 @@ export class SQLiteService {
   }
 
   query(query: string, params: any[] = []): Promise<any> {
-    return new Promise((resolve, reject) => {
-      return this.db.transaction((tx) => {
-        return tx.executeSql(query, params,
-          (tx, res) => resolve({ tx: tx, res: res }),
-          (tx, err) => console.log(err.message));
-      });
-    })
+    return new Promise((resolve, reject) =>
+      this.db.transaction((tx) =>
+        tx.executeSql(query, params, (tx, res) => resolve({ tx: tx, res: res }), (tx, err) => reject(err))
+      ))
       .catch(err => console.log(err.message));
   }
 
-  getByCatAndDate(cat: string, minDate: Date, maxDate: Date): Promise<DbRowsJoined[]> {
+  getByCatAndDate(cat: number | number[], minDate: Date, maxDate: Date): Promise<DbRowsJoined[]> {
+
+    if (typeof cat === 'number') {
+      cat = [cat];
+    }
+
+    let catINString = '(' + cat.join(',') + ')';
 
     let min = this.dateToString(minDate);
     let max = this.dateToString(maxDate);
 
-    let query = ['SELECT * FROM entries INNER JOIN categories ON entries.categoryId=categories.catId WHERE entries.categoryId IN ', cat, ' AND entries.date>=', min, ' AND entries.date<=', max].join('');
+    let query = ['SELECT * FROM entries INNER JOIN categories ON entries.categoryId=categories.catId WHERE entries.categoryId IN ', catINString, ' AND entries.date>=', min, ' AND entries.date<=', max].join('');
 
     return this.query(query)
       .then(sqlResponse => this.sqlResponseToArray(sqlResponse));
   }
 
-  getCategories(): Promise<{[x: number]: string}> {
+  getCategories(): Promise<{ [x: number]: string }> {
 
     let query = 'SELECT * FROM categories';
 
@@ -68,7 +71,7 @@ export class SQLiteService {
   }
 
   changeEntry(entryId: number, date: string, description: string, categoryId: number): void {
-    
+
     let query = ['UPDATE entries SET description="', description, '", categoryId=', categoryId, ' WHERE entryId=', entryId].join('');
     this.query(query)
       .then(sqlResponse => {
@@ -78,8 +81,10 @@ export class SQLiteService {
   }
 
   changeCategory(catId: number, category: string): void {
-    //query(....); hier de query
-    this.categoryChangedSource.next(catId);
+
+    let query = ['UPDATE categories SET category="', category, '" WHERE catId=', catId].join('');
+    this.query(query)
+      .then(sqlResponse => this.categoryChangedSource.next(catId));
   }
 
   private stringToDate(dateString: string) {

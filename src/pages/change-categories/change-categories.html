@@ -1,0 +1,19 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Wijzig rubrieksnamen     
+    </ion-title>
+    <button ion-button menuToggle right>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+  </ion-navbar>
+</ion-header>
+
+<ion-content class="change-cats">
+ <ion-list *ngIf="categories">
+ <ion-item *ngFor="let cat of categories" (click)="showPromptAlert(cat.key)">
+    <ion-icon item-left [style.background-color]="colorTable[cat.key]"></ion-icon> 
+    {{cat.value}}
+  </ion-item>
+</ion-list> 
+</ion-content>

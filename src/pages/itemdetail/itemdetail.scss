@@ -3,21 +3,29 @@
 
   background-color: #ddd;
 
+  /* ion-navbar ion-icon */
+
   .itemdetails-outer {
     display: -webkit-flex;
     display: flex;
+
+    ion-icon {
+      width: 16px;
+      height: 16px;
+      border-radius: 8px;
+      min-height: 0;
+      min-width: 0 !important;
+    }
   }
 
   .icon-container {
     margin: 3px 15px 0 0;
   }
 
-  ion-icon {
-    width: 16px;
-    height: 16px;
-    border-radius: 8px;
-    min-height: 0;
-    min-width: 0 !important;
+  //to withold selectmenu being clickable all over the page
+  .item-cover {
+    width: 0;
+    height: 0;
   }
 
   .itemdetail-cat {
@@ -49,6 +57,10 @@
 
   h3.itemdetail-amount {
     font-weight: bold;
+  }
+
+  ion-label {
+    font-size: 1.7rem;
   }
 
 }

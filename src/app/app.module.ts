@@ -8,6 +8,8 @@ import { Pie } from '../pages/overview/pie/pie';
 import { Line } from '../pages/overview/line/line';
 import { ListPage } from '../pages/list/list';
 import { ItemDetail } from '../pages/itemdetail/itemdetail';
+import { ChangeCategoriesPage } from '../pages/change-categories/change-categories';
+import { AboutPage } from '../pages/about/about';
 
 import { EuroPipe } from '../pipes/euro.pipe';
 import { DatePipe } from '../pipes/date.pipe';
@@ -23,6 +25,7 @@ import { SQLiteService } from '../services/sqlite.service';
     Line,
     ListPage,
     ItemDetail,
+    ChangeCategoriesPage,
     EuroPipe,
     DatePipe,
     MonthPipe
@@ -38,7 +41,8 @@ import { SQLiteService } from '../services/sqlite.service';
     MyApp,
     OverviewPage,    
     ListPage,
-    ItemDetail
+    ItemDetail,
+    ChangeCategoriesPage
   ],
   providers: [
   {provide: ErrorHandler, useClass: IonicErrorHandler},

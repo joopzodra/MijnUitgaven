@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NavController, NavParams, AlertController } from 'ionic-angular';
+import { NgForm } from '@angular/forms';
 
-import { ListPage } from '../list/list';
 import { SQLiteService } from '../../services/sqlite.service';
 import { DbRowsJoined } from '../../datatypes/dbRowsJoined';
 import { colors } from '../../assets/chartcolors';
@@ -13,14 +13,15 @@ import { colors } from '../../assets/chartcolors';
 
 export class ItemDetail implements OnInit {
 
-  private item: DbRowsJoined;
-  private categories: {[x: number]: string};
+  item: DbRowsJoined;
+  private categories: { [x: number]: string };
   private catKeys: string[];
   private colorTable = colors;
-  private storedCatId: number;
-  private storedDescription: string;
+  storedCatId: number;
+  storedDescription: string;
+  private saved = true;
 
-  constructor(private navCtrl: NavController, private navParams: NavParams, private sqlite: SQLiteService, public alertCtrl: AlertController) { }
+  constructor(private navCtrl: NavController, private navParams: NavParams, private sqlite: SQLiteService, private alertCtrl: AlertController) { }
 
   ngOnInit() {
 
@@ -31,6 +32,15 @@ export class ItemDetail implements OnInit {
       this.storedDescription = this.item.description;
     });
 
+    this.refreshCategories();
+
+    this.sqlite.categoryChangedSource.subscribe(catId => this.refreshCategories(),
+      error => console.log('error: ' + error.message)
+    );
+  }
+
+  refreshCategories() {
+
     this.sqlite.getCategories()
       .then(catObj => {
         this.categories = catObj;
@@ -38,13 +48,43 @@ export class ItemDetail implements OnInit {
       });
   }
 
-  onSubmit(form) {
+  private onSubmit(form: NgForm) {
     this.sqlite.changeEntry(this.item.entryId, this.item.date, this.item.description, this.item.catId);
-    form.resetForm({itemCatId: this.item.catId, itemDescription: this.item.description});     
+    form.resetForm({ itemCatId: this.item.catId, itemDescription: this.item.description });
+    this.saved = true;
   }
 
-  cancel(form) {
-    form.resetForm({itemCatId: this.storedCatId, itemDescription: this.storedDescription});    
+  private cancel(form: NgForm) {
+    form.resetForm({ itemCatId: this.storedCatId, itemDescription: this.storedDescription });
+    this.saved = true;
+  }
+
+  private changed() {
+    this.saved = false;
+  }
+
+  private ionViewCanLeave(): boolean {
+    if (!this.saved) {
+      this.showAlert();
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  private showAlert() {
+    let alert = this.alertCtrl.create({
+      title: 'Wijzigingen opslaan of annuleren',
+      subTitle: 'Je moet eerst je wijzigingen in deze uitgave opslaan of annuleren voordat je terug kunt.',
+      buttons: ['OK']
+    });
+    alert.present();
+  }
+
+  private menuAlert() {
+    if (!this.saved) {
+      this.showAlert();
+    }
   }
 
 }

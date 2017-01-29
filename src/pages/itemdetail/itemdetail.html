@@ -1,8 +1,11 @@
 <ion-header>
   <ion-navbar>
     <ion-title>
-      Details
+      Wijzig gegevens      
     </ion-title>
+    <button ion-button menuToggle right [disabled]="!saved" [style.opacity]="!saved ? '0.2' : '1'">
+      <ion-icon name="menu"></ion-icon>
+    </button>
   </ion-navbar>
 </ion-header>
 
@@ -12,7 +15,7 @@
     <ion-card-content class="itemdetails-outer">
 
       <div class="icon-container">
-      <ion-icon *ngIf="categories" item-left [style.background-color]="colorTable[item.catId]">
+        <ion-icon *ngIf="categories" item-left [style.background-color]="colorTable[item.catId]">
         </ion-icon>
       </div>
       <div class="itemdetails-inner">
@@ -28,22 +31,22 @@
     </ion-card-content>
   </ion-card>
 
-  <ion-card>
+  <ion-card *ngIf="item">
     <ion-card-content>
 
       <form (ngSubmit)="onSubmit(itemDetailForm)" #itemDetailForm="ngForm">
        <div *ngIf="categories">
-        <ion-label color="primary">Wijzig rubriek: </ion-label>
-        <ion-select [(ngModel)]="item.catId" name="itemCatId" cancelText="annuleer">        
-          <ion-option *ngFor="let catKey of catKeys" [value]=catKey>{{categories[catKey]}} </ion-option>
+        <ion-label color="primary">Wijzig rubriek:</ion-label>
+        <ion-select [(ngModel)]="item.catId" name="itemCatId" cancelText="annuleer" (ionChange)="changed()" selectedText="{{categories[item.catId]}}">        
+          <ion-option *ngFor="let catKey of catKeys" [value]=catKey>{{categories[catKey]}}</ion-option>
         </ion-select>
       </div> 
 
       <ion-label color="primary">Wijzig omschrijving:</ion-label>
-      <ion-textarea rows="8" [(ngModel)]="item.description" name="itemDescription"></ion-textarea>
+      <ion-textarea rows="8" [(ngModel)]="item.description" name="itemDescription" (focus)="changed()"></ion-textarea>
 
-      <button ion-button type="submit" [disabled]="itemDetailForm.form.pristine">Opslaan</button>
-      <button ion-button [disabled]="itemDetailForm.form.pristine" (click)="cancel(itemDetailForm)">Annuleer</button>
+      <button ion-button [disabled]="saved" (click)="cancel(itemDetailForm)">Annuleer</button>
+      <button ion-button type="submit" [disabled]="saved">Opslaan</button>
     </form>
 
 

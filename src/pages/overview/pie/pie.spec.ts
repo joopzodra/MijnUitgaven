@@ -1,7 +1,7 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { App, MenuController, NavController, Platform, Config, Keyboard, IonicModule, DomController, Form, GestureController } from 'ionic-angular';
-import { ConfigMock, FormMock, NavMock, PlatformMock, MenuMock, DomControllerMock } from '../../../mocks';
+import { ConfigMock, NavMock, PlatformMock, DomControllerMock } from '../../../mocks';
+import { Subject } from 'rxjs';
 
 import { Pie } from './pie';
 import { MonthPipe } from '../../../pipes/date.pipe';
@@ -18,40 +18,43 @@ describe('Pie', () => {
   let fixture: ComponentFixture<Pie>;
   let sqlService: SQLiteService;
 
+  let entries = entriesCsv.split('\n')
+    .map(row => row.split(';'))
+    .slice(1, 201) //don't use the first row with labels
+    .map(row => ({ entryId: row[0], date: row[1], amount: -row[2], payment_method: row[3], description: row[4], categoryId: row[5] }));
+
+  let categories: { key: number, value: string }[] = categoriesCsv.split('\n')
+    .slice(1)
+    .map((row, i) => {
+      return { key: i + 1, value: row };
+    });
+
+
   class MockSQLiteService {
 
-    entries = entriesCsv.split('\n')
-      .map(row => row.split(';'))
-      .slice(1, 200) //don't use the first row with labels
-      .map(row => ({ entryId: row[0], date: row[1], amount: -row[2], payment_method: row[3], description: row[4], categoryId: row[5] }));
-
-    categories: { key: number, value: string }[] = categoriesCsv.split('\n')
-      .slice(1)
-      .map((row, i) => {
-        return { key: i + 1, value: row };
-      });
+    entryChangedSource = new Subject<{ date: string, categoryId: number }>();
+    categoryChangedSource = new Subject<number>();
 
     //always the same response; it doesn't test category and date, since this is tested in sqlite.service.spec
-    getByCatAndDate(cat, minDate, maxDate): Promise<DbRowsJoined[]> {
+    getByCatAndDate(cat: number | number[], minDate: Date, maxDate: Date): Promise<DbRowsJoined[]> {
       //simulate inner join entries and categories
-      let arr = this.entries.map(entry => entry);
+      let arr = entries.map(entry => entry);
       arr.forEach(entry => {
         entry['catId'] = entry['categoryId'];
-        entry['category'] = this.categories.filter(cat =>
+        entry['category'] = categories.filter(cat =>
           cat.key === +entry['catId'])[0].value;
       });
-
       return new Promise((resolve, reject) => window.setTimeout(() => resolve(arr), 100));
     }
 
     getCategories(): Promise<Object> {
       let catObj = {};
-      this.categories.forEach(item => catObj[item.key] = item.value)
+      categories.forEach(item => catObj[item.key] = item.value)
       return new Promise((resolve, reject) => window.setTimeout(() => resolve(catObj), 100));
     }
   }
 
-  beforeEach(async(() => {
+  beforeEach(() => {
 
     TestBed.configureTestingModule({
       declarations: [Pie, MonthPipe, EuroPipe],
@@ -69,19 +72,16 @@ describe('Pie', () => {
       ],
       imports: [IonicModule],
     })
-  }));
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(Pie);
     comp = fixture.componentInstance;
     sqlService = fixture.debugElement.injector.get(SQLiteService);
-
   });
 
   it('mockSqlite methods are o.k.', done => {
 
-    let entries = sqlService.getByCatAndDate('fake', new Date(), new Date()).then(res => {
-      expect(res.length).toBeGreaterThan(10);
+    let entries = sqlService.getByCatAndDate(1, new Date(), new Date()).then(res => {
+      expect(res.length).toBe(200);
       expect(typeof res[0].category).toBe('string');
     });
 
@@ -93,16 +93,17 @@ describe('Pie', () => {
     Promise.all([entries, cats]).then(() => done());
   })
 
-  it('on init paths array contains several elements and cats object is not empty', async(() => {
+  it('on init paths array contains several elements and cats object is not empty', done => {
     fixture.detectChanges();
     fixture.whenStable().then(() => {
       fixture.detectChanges();
       expect(comp.paths.length).toBeGreaterThan(3);
-      expect(Object.keys(comp.cats).length).toEqual(18);
+      expect(Object.keys(comp.catsSource.value).length).toEqual(18);
     })
-  }))
+      .then(done);
+  });
 
-  it('on init there is an svg pie with a reasonable width and heigth with several slices', async(() => {
+  it('on init there is an svg pie with a reasonable width and heigth with several slices', done => {
     fixture.detectChanges();
     fixture.whenStable().then(() => {
       fixture.detectChanges();
@@ -114,28 +115,7 @@ describe('Pie', () => {
       expect(deSvg.clientWidth).toBeGreaterThan(50);
       expect(deSvg.clientHeight).toBeLessThan(1000);
     })
-  }));
-
-  /*
-    it('should display 0 as initial value', () => {
-      fixture.detectChanges();
-      const h2 = fixture.debugElement.query(By.css('h2'));
-      expect(h2.nativeElement.textContent).toEqual('Value: 0');
-    });
-  
-    it('should increment the value', () => {
-      fixture.componentInstance.onIncrementClick();
-      fixture.detectChanges();
-      const h2 = fixture.debugElement.query(By.css('h2'));
-      expect(h2.nativeElement.textContent).toEqual('Value: 1');
-    });
-  
-    it('should invoke onIncrementClick when the user clicks the increment button', () => {
-      spyOn(fixture.componentInstance, 'onIncrementClick');
-      const button = fixture.debugElement.query(By.css('.increment'));
-      button.triggerEventHandler('click', {});
-      expect(fixture.componentInstance.onIncrementClick).toHaveBeenCalled();
-    });*/
+      .then(done);
+  });
 
 });
-

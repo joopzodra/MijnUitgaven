@@ -1,13 +1,11 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
-import { Subscription } from 'rxjs/Subscription';
 import * as d3 from 'd3-selection';
 import * as d3Shape from 'd3-shape';
 import * as d3Time from 'd3-time';
 import * as d3Collection from 'd3-collection';
 import * as d3Array from 'd3-array';
 import * as d3Format from 'd3-format';
-import { Subject } from 'rxjs';
 import { BehaviorSubject } from 'rxjs';
 
 import { SQLiteService } from '../../../services/sqlite.service';
@@ -39,7 +37,7 @@ export class Pie {
   private dataSource = new BehaviorSubject<DbRowsJoined[]>([]);
   private rolledUpData: { key: string, value: number }[];
   private monthTotal: number;
-  private allCats = '(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19)'; //the database contains 18 categories
+  private allCats = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]; //the database contains 18 categories
 
   private margin = { top: 20, bottom: 20, left: 20, right: 20 };
   private width = 500;
@@ -48,6 +46,7 @@ export class Pie {
   private detachedContainer: d3.Selection<d3.BaseType, {}, null, undefined>;
   paths: { d: string, fill: string }[] = [];
   cats: {};
+  catsSource = new BehaviorSubject<{[x: number]: string}>({});
   private colorTable = colors;
 
   constructor(private navCtrl: NavController, private sqlite: SQLiteService) { }
@@ -55,19 +54,17 @@ export class Pie {
   ngOnInit() {
     this.month = this.ionicPreviousMonth;
     this.refreshDataAndPie(this.month);
-    this.sqlite.getCategories().then(cats => this.cats = cats);
+    this.refreshCategories();
 
-    this.sqlite.entryChangedSource.subscribe(x => {
-      if (this.month === [x.date.slice(0, 4), x.date.slice(4, 6)].join('-')) {
+    this.sqlite.entryChangedSource.subscribe(message => {
+      if (this.month === [message.date.slice(0, 4), message.date.slice(4, 6)].join('-')) {
         this.refreshDataAndPie(this.month);
       }
     },
       error => console.log('error: ' + error.message)
     );
 
-    this.sqlite.categoryChangedSource.subscribe( x => {
-        this.refreshDataAndPie(this.month);
-      },
+    this.sqlite.categoryChangedSource.subscribe(catId => this.refreshCategories(),
       error => console.log('error: ' + error.message)
     );
   }
@@ -80,10 +77,19 @@ export class Pie {
       });
   }
 
-  //cat must be string in format like '(1)' or '(3,6,8,9)' etc.
-  getData(cat, month) {
+  refreshCategories() {
+    this.sqlite.getCategories().then(cats => {
+      //this.cats = cats;
+      this.catsSource.next(cats);
+      //when cats changes, also DbRowsJoined changes, so data needs to be refreshed because the changed category names are used in listpag
+      this.refreshDataAndPie(this.month);
+    });
+  }
 
-    let minDate = new Date(+month.split('-')[0], +month.split('-')[1] - 1); //minus 1 because Date object is 0-based
+  //cat must be string in format like '(1)' or '(3,6,8,9)' etc.
+  getData(cat: number | number[], month: string) {
+
+    let minDate = new Date(Date.UTC(+month.split('-')[0], +month.split('-')[1] - 1)); //minus 1 because Date object is 0-based
     let maxDate = d3Time.timeMonth.offset(minDate, 1);
 
     let data = this.sqlite.getByCatAndDate(cat, minDate, maxDate)
@@ -138,10 +144,8 @@ export class Pie {
 
   toList(catId) {
     let dataSource = this.dataSource;
-    this.navCtrl.push(ListPage, { dataSource, catId });
-  }
-
-  changeEntry() {
-    this.sqlite.changeEntry(474, "20160429", "een nieuwe beschrijving", 2);
+    let catsSource = this.catsSource;
+    this.navCtrl.push(ListPage, { dataSource, catId, catsSource , month: this.month })
+      .catch(err => console.log(err));
   }
 }

@@ -18,15 +18,11 @@
   </svg>
 </div>
 
- <button class="change-cat" (click)="changeCat()">sent refresh categories</button>
- <button class="change-entry" (click)="changeEntry()">sent refresh entry</button>
-
-
-<ion-list class="pie-list" *ngIf="rolledUpData&&cats">
+<ion-list class="pie-list" *ngIf="rolledUpData&&catsSource.value">
   <ion-item *ngFor="let item of rolledUpData" (click)="toList(item.key)">
     <ion-icon item-left class="ion-icon" [style.background-color]="colorTable[item.key]">
     </ion-icon>
-    <p class="list-cat">{{cats[item.key]}}</p>  
+    <p class="list-cat">{{catsSource.value[item.key]}}</p>  
     <h3 class="list-amount">{{item.value | euro}}</h3>
     <ion-icon item-right name="arrow-forward"></ion-icon>
   </ion-item>
