@@ -19,7 +19,7 @@ export class MyApp {
     platform.ready().then(() => {
       StatusBar.styleDefault();
       Splashscreen.hide();
-    });
+   });
   }
 
   openPage(page) {

@@ -26,10 +26,10 @@ export class ChangeCategoriesPage implements OnInit {
     );
   }
 
-  refreshCategories() { console.log("hi", "start")
+  refreshCategories() {
 
     this.sqlite.getCategories()
-      .then(categories => { console.log("hi", categories)
+      .then(categories => {
         this.categories = [];
         for (let i = 1; i <= Object.keys(categories).length; i++) {
           this.categories.push({ key: i, value: categories[i] });

@@ -18,6 +18,7 @@ export class SQLiteService {
   categoryChangedSource = new Subject<number>();
 
   constructor() {
+
     if (this.win.sqlitePlugin) {
       this.db = this.win.sqlitePlugin.openDatabase({
         name: 'MijnUitgaven.sqlite',

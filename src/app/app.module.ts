@@ -28,7 +28,8 @@ import { SQLiteService } from '../services/sqlite.service';
     ChangeCategoriesPage,
     EuroPipe,
     DatePipe,
-    MonthPipe
+    MonthPipe,
+    AboutPage
   ],
   imports: [
     IonicModule.forRoot(MyApp, {
@@ -42,7 +43,8 @@ import { SQLiteService } from '../services/sqlite.service';
     OverviewPage,    
     ListPage,
     ItemDetail,
-    ChangeCategoriesPage
+    ChangeCategoriesPage,
+    AboutPage
   ],
   providers: [
   {provide: ErrorHandler, useClass: IonicErrorHandler},
