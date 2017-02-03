@@ -20,7 +20,7 @@ export class SQLiteService {
   constructor(private platform: Platform) {
 
     /*Although this app is designed for mobile devices, we also want to demonstrate it in a browser. In the browser we need an prepopulated Dexie (Indexed DB) database instead of the mobile native sqlite. We set it up in src/helpers/dexie-db/dexie-db,instantiate it here, and bind the SQLiteService methods to the methods for the dexie db */
-    if (!this.platform.is('cordova')) {
+    if (!platform.is('cordova')) {
       this.db = new DexieDb();
       this.getByCatAndDate = this.db.getByCatAndDate.bind(this.db);
       this.getCategories = this.db.getCategories.bind(this.db);
@@ -32,7 +32,7 @@ export class SQLiteService {
 
     } else {
 
-      this.platform.ready().then(() => {
+      platform.ready().then(() => {
 
         if (this.win.sqlitePlugin) {
           this.db = this.win.sqlitePlugin.openDatabase({
