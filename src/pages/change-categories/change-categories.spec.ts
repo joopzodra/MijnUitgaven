@@ -6,7 +6,7 @@ import { Subject } from 'rxjs';
 
 import { ConfigMock } from '../../mocks';
 import { SQLiteService } from '../../services/sqlite.service';
-import { categoriesCsv } from '../../assets/categories-csv';
+import { categoriesCsv } from '../../helpers/dexie-db/categories-csv';
 import { ChangeCategoriesPage } from './change-categories';
 
 describe('ChangeCategoriesPage', () => {

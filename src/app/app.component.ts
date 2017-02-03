@@ -16,7 +16,7 @@ export class MyApp {
   @ViewChild('content') navCtrl: NavController;
 
   constructor(private platform: Platform) {
-    platform.ready().then(() => {
+    this.platform.ready().then(() => {
       StatusBar.styleDefault();
       Splashscreen.hide();
    });

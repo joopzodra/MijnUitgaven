@@ -7,10 +7,9 @@ import { Pie } from './pie';
 import { MonthPipe } from '../../../pipes/date.pipe';
 import { EuroPipe } from '../../../pipes/euro.pipe';
 import { SQLiteService } from '../../../services/sqlite.service';
-import { entriesCsv } from '../../../assets/entries-csv';
-import { categoriesCsv } from '../../../assets/categories-csv';
+import { entriesCsv } from '../../../helpers/dexie-db/entries-csv';
+import { categoriesCsv } from '../../../helpers/dexie-db/categories-csv';
 import { DbRowsJoined } from '../../../datatypes/dbRowsJoined';
-
 
 describe('Pie', () => {
 

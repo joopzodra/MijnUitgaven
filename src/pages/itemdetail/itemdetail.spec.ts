@@ -10,7 +10,7 @@ import { ItemDetail } from './itemdetail';
 import { EuroPipe } from '../../pipes/euro.pipe';
 import { DatePipe } from '../../pipes/date.pipe';
 import { SQLiteService } from '../../services/sqlite.service';
-import { categoriesCsv } from '../../assets/categories-csv';
+import { categoriesCsv } from '../../helpers/dexie-db/categories-csv';
 import { DbRowsJoined } from '../../datatypes/dbRowsJoined';
 
 describe('ItemDetail', () => {
@@ -44,13 +44,17 @@ describe('ItemDetail', () => {
 
     categoryChangedSource = new Subject<number>();
 
+    getItem(){
+      return Promise.resolve(entry);
+    }
+
     getCategories(): Promise<Object> {
       let catObj = {};
       categories.forEach(item => catObj[item.key] = item.value)
       return new Promise((resolve, reject) => window.setTimeout(() => resolve(catObj), 100));
     }
 
-    changeEntry(entryId: number, date: string, description: string, categoryId: number): void { }
+    /*changeEntry(entryId: number, date: string, description: string, categoryId: number): void { }*/ //no database testing
   }
 
   beforeEach(() => {

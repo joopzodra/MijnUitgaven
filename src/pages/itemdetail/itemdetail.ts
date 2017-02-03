@@ -4,7 +4,7 @@ import { NgForm } from '@angular/forms';
 
 import { SQLiteService } from '../../services/sqlite.service';
 import { DbRowsJoined } from '../../datatypes/dbRowsJoined';
-import { colors } from '../../assets/chartcolors';
+import { colors } from '../../helpers/chartcolors';
 
 @Component({
   selector: 'itemdetail',
@@ -25,12 +25,13 @@ export class ItemDetail implements OnInit {
 
   ngOnInit() {
 
-    let entryId = this.navParams.get('entryId');
-    this.navParams.get('dataSource').subscribe(data => {
-      this.item = data.filter(item => item.entryId === +entryId)[0];
-      this.storedCatId = this.item.catId;
-      this.storedDescription = this.item.description;
-    });
+    let entryId = +this.navParams.get('entryId');
+    this.sqlite.getItem(entryId)
+      .then(item => { console.log(item)
+        this.item = item;
+        this.storedCatId = item.catId;
+        this.storedDescription = item.description;
+      });
 
     this.refreshCategories();
 
@@ -49,7 +50,7 @@ export class ItemDetail implements OnInit {
   }
 
   private onSubmit(form: NgForm) {
-    this.sqlite.changeEntry(this.item.entryId, this.item.date, this.item.description, this.item.catId);
+    this.sqlite.changeEntry(this.item.entryId, this.item.date, this.item.description, +this.item.catId);
     form.resetForm({ itemCatId: this.item.catId, itemDescription: this.item.description });
     this.saved = true;
   }

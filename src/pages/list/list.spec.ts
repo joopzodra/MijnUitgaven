@@ -8,8 +8,8 @@ import { ConfigMock } from '../../mocks';
 import { ListPage } from './list';
 import { EuroPipe } from '../../pipes/euro.pipe';
 import { DatePipe, MonthPipe } from '../../pipes/date.pipe';
-import { entriesCsv } from '../../assets/entries-csv';
-import { categoriesCsv } from '../../assets/categories-csv';
+import { entriesCsv } from '../../helpers/dexie-db/entries-csv';
+import { categoriesCsv } from '../../helpers/dexie-db/categories-csv';
 import { DbRowsJoined } from '../../datatypes/dbRowsJoined';
 
 describe('ListPage', () => {

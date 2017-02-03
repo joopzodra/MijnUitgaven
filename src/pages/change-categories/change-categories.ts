@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AlertController } from 'ionic-angular';
 
-import { colors } from '../../assets/chartcolors';
+import { colors } from '../../helpers/chartcolors';
 import { SQLiteService } from '../../services/sqlite.service';
 
 @Component({

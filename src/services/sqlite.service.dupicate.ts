@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { Platform } from 'ionic-angular';
 
-import { DexieDb } from '../helpers/dexie-db/dexie-db';
+//import { createWebSqlDb } from '../helpers/dexie-db/create-websql-db';
 import { DbRowsJoined } from '../datatypes/dbRowsJoined';
 
 /*
@@ -13,36 +13,24 @@ import { DbRowsJoined } from '../datatypes/dbRowsJoined';
 export class SQLiteService {
 
   win: any = window;
-  db;
+  db: any = null;
   entryChangedSource = new Subject<{ date: string, categoryId: number }>();
   categoryChangedSource = new Subject<number>();
 
   constructor(private platform: Platform) {
 
-    /*Although this app is designed for mobile devices, we also want to demonstrate it in a browser. In the browser we need an prepopulated Dexie (Indexed DB) database instead of the mobile native sqlite. We set it up in src/helpers/dexie-db/dexie-db,instantiate it here, and bind the SQLiteService methods to the methods for the dexie db */
-    if (!this.platform.is('cordova')) {
-      this.db = new DexieDb();
-      this.getByCatAndDate = this.db.getByCatAndDate.bind(this.db);
-      this.getCategories = this.db.getCategories.bind(this.db);
-      this.getItem = this.db.getItem.bind(this.db);
-      this.changeEntry = this.db.changeEntry.bind(this.db);
-      this.changeCategory = this.db.changeCategory.bind(this.db);
-      this.entryChangedSource = this.db.entryChangedSource;
-      this.categoryChangedSource = this.db.categoryChangedSource;
+    this.platform.ready().then(() => {
 
-    } else {
-
-      this.platform.ready().then(() => {
-
-        if (this.win.sqlitePlugin) {
-          this.db = this.win.sqlitePlugin.openDatabase({
-            name: 'MijnUitgaven.sqlite',
-            location: 'default',
-            createFromLocation: 1
-          });
-        }
-      });
-    }
+      if (this.win.sqlitePlugin) {
+        this.db = this.win.sqlitePlugin.openDatabase({
+          name: 'MijnUitgaven.sqlite',
+          location: 'default',
+          createFromLocation: 1
+        });
+      } else {
+        //this.db = createWebSqlDb(); //for development only
+      }
+    });
   }
 
   query(query: string, params: any[] = []): Promise<any> {
@@ -53,7 +41,7 @@ export class SQLiteService {
       .catch(err => console.log(err.message));
   }
 
-  getByCatAndDate(cat, minDate: Date, maxDate: Date): Promise<DbRowsJoined[]> {
+  getByCatAndDate(cat: number | number[], minDate: Date, maxDate: Date): Promise<DbRowsJoined[]> {
 
     if (typeof cat === 'number') {
       cat = [cat];
@@ -83,14 +71,7 @@ export class SQLiteService {
           catObj[item.catId] = item.category;
         }
         return catObj;
-      });
-  }
-
-  getItem(entryId): Promise<DbRowsJoined> {
-
-    let query = ['SELECT * FROM entries INNER JOIN categories ON entries.categoryId=categories.catId WHERE entries.entryId=', entryId].join('');
-    return this.query(query)
-      .then(sqlResponse => this.sqlResponseToArray(sqlResponse)[0]);
+      })
   }
 
   changeEntry(entryId: number, date: string, description: string, categoryId: number): void {
@@ -99,7 +80,7 @@ export class SQLiteService {
     this.query(query)
       .then(sqlResponse => {
         this.entryChangedSource.next({ date: date, categoryId: categoryId });
-        //return sqlResponse;
+        return sqlResponse;
       });
   }
 
@@ -110,10 +91,9 @@ export class SQLiteService {
       .then(sqlResponse => this.categoryChangedSource.next(catId));
   }
 
-  //Not needed since we don't load the database in this demo version
-  /*  private stringToDate(dateString: string) {
-      return new Date(+dateString.slice(0, 4), +dateString.slice(4, 6) - 1, +dateString.slice(6));
-    }*/
+/*  private stringToDate(dateString: string) {
+    return new Date(+dateString.slice(0, 4), +dateString.slice(4, 6) - 1, +dateString.slice(6));
+  }*/
 
   private dateToString(date: Date) {
     let iso = date.toISOString();

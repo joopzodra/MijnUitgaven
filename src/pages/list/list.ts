@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 
-import { colors } from '../../assets/chartcolors';
+import { colors } from '../../helpers/chartcolors';
 import { ItemDetail } from '../itemdetail/itemdetail';
 import { DbRowsJoined } from '../../datatypes/dbRowsJoined';
 
@@ -25,7 +25,6 @@ export class ListPage implements OnInit {
   ngOnInit() {
     this.sortBy = 'date';
     this.month = this.navParams.get('month');
-    //this.category = this.navParams.get('category');
     this.catId = this.navParams.get('catId').toString();
     this.navParams.get('dataSource').subscribe(data => {
       this.data = data.filter(item => item.catId === +this.catId);      
@@ -59,8 +58,8 @@ export class ListPage implements OnInit {
   }
 
   itemSelected(item: DbRowsJoined) {
-    let dataSource = this.navParams.get('dataSource');
-    this.navCtrl.push(ItemDetail, { dataSource, entryId: item.entryId })
+    //let dataSource = this.navParams.get('dataSource');
+    this.navCtrl.push(ItemDetail, { /*dataSource,*/ entryId: item.entryId })
     .catch(err => console.log(err));
   }
 

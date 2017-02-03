@@ -1,6 +1,7 @@
 import { NgModule, ErrorHandler } from '@angular/core';
 import { FormsModule }   from '@angular/forms';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
+import { SQLite } from 'ionic-native';
 
 import { MyApp } from './app.component';
 import { OverviewPage } from '../pages/overview/overview';
@@ -49,6 +50,7 @@ import { SQLiteService } from '../services/sqlite.service';
   providers: [
   {provide: ErrorHandler, useClass: IonicErrorHandler},
   SQLiteService,
+  SQLite
   ]   
 })
 export class AppModule {}

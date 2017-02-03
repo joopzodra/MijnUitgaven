@@ -6,6 +6,7 @@
   </ion-item>
 </div>
 
+<div class="pie-chart-extra-container">
 <div class="pie-chart-container" #chart>
 
   <svg [attr.viewBox]="'0 0 ' + (width + margin.left + margin.right) + ' ' + (height + margin.top + margin.bottom)">
@@ -16,6 +17,7 @@
 
     </g>
   </svg>
+</div>
 </div>
 
 <ion-list class="pie-list" *ngIf="rolledUpData&&catsSource.value">
