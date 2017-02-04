@@ -1,15 +1,15 @@
 import { Platform } from 'ionic-angular';
 
 import { SQLiteService } from './sqlite.service';
-import { entriesCsv } from '../helpers/dexie-db/entries-csv';
-import { categoriesCsv } from '../helpers/dexie-db/categories-csv';
+/*import { entriesCsv } from '../helpers/dexie-db/entries-csv';
+import { categoriesCsv } from '../helpers/dexie-db/categories-csv';*/
 
 describe('SQLiteService', () => {
 
   let service: SQLiteService;
 
-  let data = entriesCsv.split('\n').map(row => row.split(';')).slice(1); //don't use the first row with labels
-  let cats = categoriesCsv.split('\n').slice(1);
+/*  let data = entriesCsv.split('\n').map(row => row.split(';')).slice(1); //don't use the first row with labels
+  let cats = categoriesCsv.split('\n').slice(1);*/
 
   let originalTimeout;
 

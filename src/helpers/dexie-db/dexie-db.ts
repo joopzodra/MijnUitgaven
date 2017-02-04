@@ -41,8 +41,6 @@ export class DexieDb extends Dexie {
       cat = [cat];
     }
 
-    let catINString = '(' + cat.join(',') + ')';
-
     let min = this.dateToString(minDate);
     let max = this.dateToString(maxDate);
 

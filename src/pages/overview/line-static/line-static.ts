@@ -11,8 +11,8 @@ import * as d3Time from 'd3-time';
 import { ListPage } from '../../list/list';
 
 @Component({
-  selector: 'line-chart',
-  templateUrl: 'line.html',
+  selector: 'line-static',
+  templateUrl: 'line-static.html',
   styles: [`
   path {
     fill: none;
@@ -30,7 +30,7 @@ import { ListPage } from '../../list/list';
   }
   `]
 })
-export class Line {
+export class LineStatic {
 
   data = [8, 15, 16, 23, 42, 14, 8, 15, 16, 23, 42, 14 ];
   colors = ['#A60F2B', '#648C85', '#B3F2C9', '#528C18', '#C3F25C'];

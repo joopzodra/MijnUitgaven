@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { App, MenuController, NavController, Platform, Config, Keyboard, IonicModule, DomController, GestureController, Form } from 'ionic-angular'; //default testing components
-import { By } from '@angular/platform-browser';
-import { NavParams, AlertController } from 'ionic-angular';
+import { AlertController } from 'ionic-angular';
 import { Subject } from 'rxjs';
 
 import { ConfigMock } from '../../mocks';
