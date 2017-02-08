@@ -53,21 +53,18 @@ export class SQLiteService {
       .catch(err => console.log(err.message));
   }
 
-  getByCatAndDate(cat, minDate: Date, maxDate: Date): Promise<DbRowsJoined[]> {
+  getByCatAndDate(cat, minDate: string, maxDate: string): Promise<DbRowsJoined[]> {
+
+    let query;
 
     if (typeof cat === 'number') {
-      cat = [cat];
+      query = ['SELECT * FROM entries WHERE entries.categoryId=', cat, ' AND entries.date>=', minDate, ' AND entries.date<', maxDate].join('');
+    } else {
+      query = ['SELECT * FROM entries WHERE entries.date>=', minDate, ' AND entries.date<', maxDate].join('');
     }
 
-    let catINString = '(' + cat.join(',') + ')';
-
-    let min = this.dateToString(minDate);
-    let max = this.dateToString(maxDate);
-
-    let query = ['SELECT * FROM entries INNER JOIN categories ON entries.categoryId=categories.catId WHERE entries.categoryId IN ', catINString, ' AND entries.date>=', min, ' AND entries.date<=', max].join('');
-
     return this.query(query)
-      .then(sqlResponse => this.sqlResponseToArray(sqlResponse));
+      .then(sqlResponse => {console.log(sqlResponse); return this.sqlResponseToArray(sqlResponse)});
   }
 
   getCategories(): Promise<{ [x: number]: string }> {
@@ -97,10 +94,7 @@ export class SQLiteService {
 
     let query = ['UPDATE entries SET description="', description, '", categoryId=', categoryId, ' WHERE entryId=', entryId].join('');
     this.query(query)
-      .then(sqlResponse => {
-        this.entryChangedSource.next({ date: date, categoryId: categoryId });
-        //return sqlResponse;
-      });
+      .then(sqlResponse => this.entryChangedSource.next({ date: date, categoryId: categoryId }));
   }
 
   changeCategory(catId: number, category: string): void {
@@ -108,16 +102,6 @@ export class SQLiteService {
     let query = ['UPDATE categories SET category="', category, '" WHERE catId=', catId].join('');
     this.query(query)
       .then(sqlResponse => this.categoryChangedSource.next(catId));
-  }
-
-  //Not needed since we don't load the database in this demo version
-  /*  private stringToDate(dateString: string) {
-      return new Date(+dateString.slice(0, 4), +dateString.slice(4, 6) - 1, +dateString.slice(6));
-    }*/
-
-  private dateToString(date: Date) {
-    let iso = date.toISOString();
-    return iso.slice(0, 4) + iso.slice(5, 7) + iso.slice(8, 10);
   }
 
   private sqlResponseToArray(sqlResponse) {

@@ -1,0 +1,34 @@
+<h2>Line Chartssss</h2>
+
+<div>Let's hshowslsls {{show}}</div>
+<div class="line-chart-extra-container">
+  <div class="line-chart-container" *ngIf="show">
+
+    <svg [attr.viewBox]="'0 0 ' + (width + margin.left + margin.right) + ' ' + (height + margin.top + margin.bottom)">
+
+      <g [attr.transform]="'translate(' + margin.left + ',' + margin.top + ')'">
+
+        <path [attr.d]="linePath"></path>
+
+        <g class="circles">
+          <circle *ngFor="let circle of circles" [attr.cx]="circle.cx" [attr.cy]="circle.cy" [attr.r]="circle.r"></circle>
+        </g>
+
+        <g class="xAxis">
+          <line [attr.x1]="0" [attr.y1]="height" [attr.x2]="width" [attr.y2]="height"></line>
+          <line *ngFor="let tick of xTicksPaths" [attr.x1]="tick.x1" [attr.y1]="tick.y1" [attr.x2]="tick.x2" [attr.y2]="tick.y2"></line>
+          <text *ngFor="let label of xLabels" [attr.x]="label.x" [attr.y]="label.y">{{label.text}}</text>
+        </g>
+
+        <g class="yAxis">
+          <line [attr.x1]="0" [attr.y1]="0" [attr.x2]="0" [attr.y2]="height"></line>
+          <line *ngFor="let tick of yTicksPaths" [attr.x1]="tick.x1" [attr.y1]="tick.y1" [attr.x2]="tick.x2" [attr.y2]="tick.y2"></line>
+          <text *ngFor="let label of yLabels" [attr.x]="label.x" [attr.y]="label.y">{{label.text}}</text>
+        </g>
+
+      </g>
+
+    </svg>
+
+  </div>
+</div>

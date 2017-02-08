@@ -25,19 +25,18 @@ import { DbRowsJoined } from '../../../datatypes/dbRowsJoined';
 export class Pie {
 
   private currentDate = new Date(2016, 4, 31);
-  private previousMonth = this.currentDate.getMonth() !== 0 ? d3Format.format('02')(this.currentDate.getMonth()) : '12';
-  private previousMonthYear = this.currentDate.getMonth() !== 0 ? this.currentDate.getFullYear() : this.currentDate.getFullYear() - 1;
-  private ionicPreviousMonth = [this.previousMonthYear.toString(), this.previousMonth].join('-');
+  private previousMonth: string = this.currentDate.getMonth() !== 0 ? d3Format.format('02')(this.currentDate.getMonth()) : '12';
+  private previousMonthYear: string = this.currentDate.getMonth() !== 0 ? this.currentDate.getFullYear().toString() : (this.currentDate.getFullYear() - 1).toString();
+
   // In Ionic datetime string is 1-based: january = 1, february = 2, etc.
   // Ionic datetime string format: "2016-04"
   // d3.format("02")(4) fills space up to 2 digits using leading zero's (it returns a string)
-
-  private month: string //Ionic datetime string
+  private yearmonth: string = [this.previousMonthYear, this.previousMonth].join('-'); //Ionic datetime string
 
   private dataSource = new BehaviorSubject<DbRowsJoined[]>([]);
   private rolledUpData: { key: string, value: number }[];
   private monthTotal: number;
-  private allCats = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]; //the database contains 18 categories
+  private allCats = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]; //the database contains 18 categories
 
   private margin = { top: 20, bottom: 20, left: 20, right: 20 };
   private width = 500;
@@ -57,13 +56,12 @@ export class Pie {
 
     this.platform.ready().then(() => {
 
-      this.month = this.ionicPreviousMonth;
-      this.refreshDataAndPie(this.month);
       this.refreshCategories();
+      //this.refreshDataAndPie(this.month); //refreshCategories() already called refreshDataAndPie
 
       this.sqlite.entryChangedSource.subscribe(message => {
-        if (this.month === [message.date.slice(0, 4), message.date.slice(4, 6)].join('-')) {
-          this.refreshDataAndPie(this.month);
+        if (this.yearmonth === [message.date.slice(0, 4), message.date.slice(4, 6)].join('-')) {
+          this.refreshDataAndPie(this.yearmonth);
         }
       },
         error => console.log('error: ' + error.message)
@@ -88,15 +86,18 @@ export class Pie {
     this.sqlite.getCategories().then(cats => {
       this.catsSource.next(cats);
       //when cats changes, also DbRowsJoined changes, so data needs to be refreshed because the changed category names are used in listpag
-      this.refreshDataAndPie(this.month);
+      this.refreshDataAndPie(this.yearmonth);
     });
   }
 
-  //cat must be string in format like '(1)' or '(3,6,8,9)' etc.
-  getData(cat: number | number[], month: string) {
+  getData(cat: number | number[], yearmonth: string) {
 
-    let minDate = new Date(Date.UTC(+month.split('-')[0], +month.split('-')[1] - 1)); //minus 1 because Date object is 0-based
-    let maxDate = d3Time.timeMonth.offset(minDate, 1);
+    let yearAndMonth = yearmonth.split('-');
+
+    let minDate = yearAndMonth[0] + yearAndMonth[1] + '01';
+    let maxDateYear = yearAndMonth[1] !== '12' ? yearAndMonth[0] : (+yearAndMonth[0] + 1).toString();
+    let maxDateMonth = yearAndMonth[1] !== '12' ? d3Format.format('02')(+yearAndMonth[1] + 1) : '01'
+    let maxDate = maxDateYear + maxDateMonth + '01';
 
     let data = this.sqlite.getByCatAndDate(cat, minDate, maxDate)
       .then(response => {
@@ -151,7 +152,8 @@ export class Pie {
   toList(catId) {
     let dataSource = this.dataSource;
     let catsSource = this.catsSource;
-    this.navCtrl.push(ListPage, { dataSource, catId, catsSource, month: this.month })
+    this.navCtrl.push(ListPage, { dataSource, catId, catsSource, month: this.yearmonth })
       .catch(err => console.log(err));
   }
+  
 }

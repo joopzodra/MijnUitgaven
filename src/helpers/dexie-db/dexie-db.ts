@@ -4,8 +4,22 @@ import { Subject } from 'rxjs';
 import { entriesCsv } from './entries-csv';
 import { categoriesCsv } from './categories-csv';
 
-//NB. If you want to start with a fresh database, clear the browser data before running the app
+interface IEntry {
+  entryId?: number; // Primary key. Optional (autoincremented)
+  date: string;
+  amount: number;
+  payment_method: string;
+  description: string;
+  categoryId: number
+}
 
+interface ICategory {
+  catId?: number; // Primary key. Optional (autoincremented)
+  category: string
+}
+
+
+//NB. If you want to start with a fresh database, clear the browser data before running the app
 
 export class DexieDb extends Dexie {
 
@@ -19,8 +33,8 @@ export class DexieDb extends Dexie {
   private cats = categoriesCsv.split('\n').slice(1) //don't use the first row with labels
     .map(cat => ({ category: cat }));
 
-  entries: Dexie.Table<Entry, number>;
-  categories: Dexie.Table<Category, number>;
+  entries: Dexie.Table<IEntry, number>;
+  categories: Dexie.Table<ICategory, number>;
 
   constructor() {
     super('MijnUitgaven');
@@ -35,25 +49,18 @@ export class DexieDb extends Dexie {
     });
   }
 
-  getByCatAndDate(cat, minDate: Date, maxDate: Date) {
+  getByCatAndDate(cat, minDate: string, maxDate: string) {
 
     if (typeof cat === 'number') {
-      cat = [cat];
+
+      return this.entries.where('date').between(minDate, maxDate)
+      .filter(entry => entry.categoryId === cat)
+      .toArray()
+      .catch(err => console.log(err))
     }
 
-    let min = this.dateToString(minDate);
-    let max = this.dateToString(maxDate);
-
-    return this.entries.where('date').between(min, max).filter(entry => cat.indexOf(entry.categoryId) !== -1).toArray(entries => {
-      return Promise.all(entries.map(entry => {
-        return this.categories.where('catId').equals(entry.categoryId).toArray()
-          .then(result => {
-            entry['catId'] = result[0].catId;
-            entry['category'] = result[0].category;
-            return entry;
-          });
-      }));
-    });
+    return this.entries.where('date').between(minDate, maxDate).toArray()
+    .catch(err => console.log(err));
   }
 
   getCategories() {
@@ -66,7 +73,8 @@ export class DexieDb extends Dexie {
         catObj[item.catId] = item.category;
       }
       return catObj
-    });
+    })
+    .catch(err => console.log(err));
   }
 
   getItem(entryId) {
@@ -95,23 +103,4 @@ export class DexieDb extends Dexie {
       .then(response => this.categoryChangedSource.next(catId));
   }
 
-  dateToString(date: Date) {
-    let iso = date.toISOString();
-    return iso.slice(0, 4) + iso.slice(5, 7) + iso.slice(8, 10);
-  }
-
-}
-
-export interface Entry {
-  entryId?: number; // Primary key. Optional (autoincremented)
-  date: string;
-  amount: number;
-  payment_method: string;
-  description: string;
-  categoryId: number
-}
-
-export interface Category {
-  catId?: number; // Primary key. Optional (autoincremented)
-  category: string
 }

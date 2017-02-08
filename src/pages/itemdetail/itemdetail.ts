@@ -27,7 +27,7 @@ export class ItemDetail implements OnInit {
 
     let entryId = +this.navParams.get('entryId');
     this.sqlite.getItem(entryId)
-      .then(item => { console.log(item)
+      .then(item => {
         this.item = item;
         this.storedCatId = item.catId;
         this.storedDescription = item.description;

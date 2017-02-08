@@ -7,6 +7,7 @@ import { MyApp } from './app.component';
 import { OverviewPage } from '../pages/overview/overview';
 import { Pie } from '../pages/overview/pie/pie';
 import { LineStatic } from '../pages/overview/line-static/line-static';
+import { Line } from '../pages/overview/line/line';
 import { ListPage } from '../pages/list/list';
 import { ItemDetail } from '../pages/itemdetail/itemdetail';
 import { ChangeCategoriesPage } from '../pages/change-categories/change-categories';
@@ -24,6 +25,7 @@ import { SQLiteService } from '../services/sqlite.service';
     OverviewPage,
     Pie,
     LineStatic,
+    Line,
     ListPage,
     ItemDetail,
     ChangeCategoriesPage,

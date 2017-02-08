@@ -14,7 +14,7 @@
   <div class="pie-month-amount">
     <ion-item>
       <p item-left>{{month | month | uppercase}}</p>
-      <h3 item-right *ngIf="monthTotal">{{category}}: {{-monthTotal | euro}}</h3>
+      <h3 item-right *ngIf="monthTotal">{{categories[catId]}}: {{-monthTotal | euro}}</h3>
     </ion-item>
   </div>
 
@@ -30,9 +30,9 @@
 
   <ion-list *ngIf="data && data.length > 0">
     <ion-item *ngFor="let item of data" (click)="itemSelected(item)">
-      <ion-icon item-left [style.background-color]="colorTable[item.catId]">
+      <ion-icon item-left [style.background-color]="colorTable[item.categoryId]">
       </ion-icon>
-      <p class="list-cat">{{item.category}}</p>  
+      <p class="list-cat">{{categories[item.categoryId]}}</p>  
       <div>
         <p class="list-date">{{item.date | date}}</p>
         <p class="list-pay-meth">{{item.payment_method}}</p>

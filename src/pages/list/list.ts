@@ -15,7 +15,7 @@ export class ListPage implements OnInit {
   data: DbRowsJoined[];
   sortBy: string;
   private catId: number;
-  private category: string;
+  private categories: string[];
   private month: string;
   private monthTotal: number;
   private colorTable = colors;
@@ -27,12 +27,12 @@ export class ListPage implements OnInit {
     this.month = this.navParams.get('month');
     this.catId = this.navParams.get('catId').toString();
     this.navParams.get('dataSource').subscribe(data => {
-      this.data = data.filter(item => item.catId === +this.catId);      
-      this.data.sort(this.sortByDateThenAmount);
+      this.data = data.filter(item => item.categoryId === +this.catId);      
+      this.data.sort(this.sortByDateThenAmount); 
       this.monthTotal = this.data.reduce((a, b) => a + b.amount, 0)
     });
 
-    this.navParams.get('catsSource').subscribe(cats => this.category = cats[this.catId]);
+    this.navParams.get('catsSource').subscribe(cats => this.categories = cats);
 
   }
 
