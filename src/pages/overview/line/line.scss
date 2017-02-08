@@ -1,16 +1,16 @@
 line-chart {
 
   .line-chart-extra-container {
-    max-height: 350px;
+    max-height: 380px;
+    overflow: hidden;
   }
 
   .line-chart-container {
 
     position: relative;
-    width: 72%;
-    max-width: 350px;
+    max-width: 600px;
     height: 0;
-    padding-top: 72%;
+    padding-top: 60%;
     margin: 0 auto;
 
     svg {

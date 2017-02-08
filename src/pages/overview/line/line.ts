@@ -46,7 +46,7 @@ export class Line {
   dataContainer: d3.Selection<d3.BaseType, {}, null, undefined>;
   //paths: { d: string, fill: string }[] = [];
 
-  timeRange: string[];
+  timeRange: {yearMonth: string, monthName: string, year: string}[];
   dataObjects: any; //a specific typing results in conflicting d3 typing rules
   linePath: string;
   circles: { cx: number, cy: number, r: number }[] = [];
@@ -66,7 +66,7 @@ export class Line {
 
   ngOnInit() {
 
-    this.timeRange = this.getSixMonthArray(this.yearmonth);
+    this.timeRange = this.sixMonthArray(this.yearmonth);
 
     this.platform.ready().then(() => {
 
@@ -82,38 +82,34 @@ export class Line {
     });
   }
 
-  getSixMonthArray(yearmonth) {
+  sixMonthArray(yearmonth) {
 
     let yearAndMonth = yearmonth.split('-');
-    let year = yearAndMonth[0];
-    let month = yearAndMonth[1];
-    let monthArray = [year + month];
-    month = +month;
-    year = +year;
+    let yearString = yearAndMonth[0];
+    let monthString = yearAndMonth[1];
+    let month = +monthString;
+    let year = +yearString;
 
-    let i = 0
-    while (i < 5) {
-      if (month !== 1) {
-        month = month - 1;
-        let previousMonth = d3Format.format('02')(month);
-        monthArray.unshift(year.toString() + previousMonth);
-        i++;
-      }
-      else {
-        month = 12;
-        year = year - 1;
-        monthArray.unshift(year.toString() + month.toString());
-        i++;
-      }
+    function monthToName(month: number): string {
+      return ['jan', 'feb', 'mrt', 'apr', 'mei', 'juni', 'juli', 'aug', 'sept', 'okt', 'nov', 'dec'].filter((d, i) => i + 1 === month)[0]
     }
+     
+    let monthArray = [{yearMonth: yearString + monthString, monthName: monthToName(month), year: yearString}];
+
+    [1, 2, 3, 4, 5].forEach(n => {
+      let mon = n < month ? month - n : 12 - n + month;
+      let y = n < month ? year : year - 1;
+      let yearMonthString = y.toString() + d3Format.format('02')(mon);
+      monthArray.unshift({yearMonth: yearMonthString, monthName: monthToName(mon), year: y.toString()});
+    })
 
     return monthArray
   }
 
   getData(cat: number | number[], yearmonth: string) {
 
-    let minDate = this.timeRange[0] + '01';
-    let maxDate = this.timeRange[this.timeRange.length - 1] + '32'; //we want to search till the end of the maxDate month; databases search dates lower than maxdate, so lower than something like "20160432"
+    let minDate = this.timeRange[0].yearMonth + '01';
+    let maxDate = this.timeRange[this.timeRange.length - 1].yearMonth + '32'; //we want to search till the end of the maxDate month; databases search dates lower than maxdate, so lower than something like "20160432"
 
     let data = this.sqlite.getByCatAndDate(cat, minDate, maxDate)
       .then(response => {
@@ -127,7 +123,7 @@ export class Line {
         .rollup(arrayCategoryDbRowsJoined => <any>d3Array.sum(arrayCategoryDbRowsJoined.map(obj => -obj['amount'])))
         .entries(data);
 
-      return this.dataObjects = rolledUpData.map((d, i) => ({ date: this.timeRange[i], value: d.value }))
+      return this.dataObjects = rolledUpData.map((d, i) => ({ date: this.timeRange[i].yearMonth, value: d.value }))
     })
   }
 
@@ -139,7 +135,7 @@ export class Line {
   drawDetachedChart() {
 
     let x = d3Scale.scaleBand()
-      .domain(this.timeRange)
+      .domain(this.timeRange.map((m) => m.yearMonth))
       .rangeRound([0, this.width]);
 
     let values = this.dataObjects.map(d => d.value);
@@ -200,8 +196,8 @@ export class Line {
     let tickSize = 6;
     let tickPadding = 15;
     let ticks = this.timeRange; //don't use last tick because we will shift ticks to the right;
-    ticks.forEach((d, i) => this.xTicksPaths[i] = { x1: x(d) + shiftX, y1: this.height, x2: x(d) + shiftX, y2: this.height + tickSize });
-    ticks.forEach((d, i) => this.xLabels[i] = { text: d, x: x(d) + shiftX, y: this.height + tickSize + tickPadding });
+    ticks.forEach((d, i) => this.xTicksPaths[i] = { x1: x(d.yearMonth) + shiftX, y1: this.height, x2: x(d.yearMonth) + shiftX, y2: this.height + tickSize });
+    ticks.forEach((d, i) => this.xLabels[i] = { text: d.monthName, x: x(d.yearMonth) + shiftX, y: this.height + tickSize + tickPadding });
   }
 
   yAxis(y) {
@@ -211,7 +207,7 @@ export class Line {
     let baselineShift = 3
     let ticks = y.ticks(tickCount)
     ticks.forEach((d, i) => this.yTicksPaths[i] = { x1: -tickSize, y1: y(d), x2: 0, y2: y(d) });
-    ticks.forEach((d, i) => this.yLabels[i] = { text: d.toString(), x: -tickSize - tickPadding, y: y(d) + baselineShift });
+    ticks.forEach((d, i) => this.yLabels[i] = { text: '€ ' + d.toString(), x: -tickSize - tickPadding, y: y(d) + baselineShift });
   }
 
 }
