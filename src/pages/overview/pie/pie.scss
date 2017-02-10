@@ -11,14 +11,14 @@
 }
 
 .pie-chart-extra-container {
-  max-height: 350px;
+  max-height: 250px;
 }
 
 .pie-chart-container {
 
   position: relative;
   width: 72%;
-  max-width: 350px;
+  max-width: 250px;
   height: 0;
   padding-top: 72%;
   margin: 0 auto;
@@ -27,6 +27,10 @@
     position: absolute;
     top: 0;
     left: 0;  
+  }
+
+  path {
+    stroke-width: 1px;
   }
 }
 
@@ -49,7 +53,7 @@
   }
 
   .list-cat {
-    display: inline-block;
+    float: left;
   }
 
   .list-amount {

@@ -15,11 +15,11 @@
     <ion-card-content class="itemdetails-outer">
 
       <div class="icon-container">
-        <ion-icon *ngIf="categories" item-left [style.background-color]="colorTable[item.catId]">
+        <ion-icon *ngIf="categories" item-left [style.background-color]="colorTable[item.categoryId]">
         </ion-icon>
       </div>
       <div class="itemdetails-inner">
-        <p *ngIf="categories" class="itemdetail-cat">{{categories[item.catId] | uppercase}}</p>  
+        <p *ngIf="categories" class="itemdetail-cat">{{categories[item.categoryId] | uppercase}}</p>  
         <div>
           <p class="itemdetail-date">{{item.date | date}}</p>
           <p class="itemdetail-pay-meth">{{item.payment_method}}</p>
@@ -37,8 +37,8 @@
       <form (ngSubmit)="onSubmit(itemDetailForm)" #itemDetailForm="ngForm">
        <div *ngIf="categories">
         <ion-label color="primary">Wijzig rubriek:</ion-label>
-        <ion-select [(ngModel)]="item.catId" name="itemCatId" cancelText="annuleer" (ionChange)="changed()" selectedText="{{categories[item.catId]}}">        
-          <ion-option *ngFor="let catKey of catKeys" [value]=catKey>{{categories[catKey]}}</ion-option>
+        <ion-select [(ngModel)]="item.categoryId" name="itemCatId" cancelText="annuleer" (ionChange)="changed()" placeholder="nog niet gerubriceerd">     
+          <ion-option *ngFor="let catKey of catKeys.slice(1)" [value]=catKey>{{categories[catKey]}}</ion-option>
         </ion-select>
       </div> 
 

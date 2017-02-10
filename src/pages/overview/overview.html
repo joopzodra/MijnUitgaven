@@ -12,11 +12,11 @@
 <ion-content padding>
 
   <div>
-    <pie-chart></pie-chart>
+    <pie-chart (yearMonthMessage)="yearMonthMessageHandler($event)" ></pie-chart>
   </div>
 
   <div>
-    <line-chart></line-chart>
+    <line-chart [yearmonth]="yearmonth"></line-chart>
   </div>
 
 </ion-content>

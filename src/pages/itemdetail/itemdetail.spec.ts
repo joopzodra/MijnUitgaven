@@ -11,7 +11,7 @@ import { EuroPipe } from '../../pipes/euro.pipe';
 import { DatePipe } from '../../pipes/date.pipe';
 import { SQLiteService } from '../../services/sqlite.service';
 import { categoriesCsv } from '../../helpers/dexie-db/categories-csv';
-import { DbRowsJoined } from '../../datatypes/dbRowsJoined';
+import { IEntry } from '../../datatypes/i-entry';
 
 describe('ItemDetail', () => {
 
@@ -19,7 +19,7 @@ describe('ItemDetail', () => {
   let fixture: ComponentFixture<ItemDetail>;
   let sqlService: SQLiteService;
 
-  let entry: DbRowsJoined = { entryId: 2, date: "20150505", catId: 1, description: 'test', amount: 220.2, category: 'test', categoryId: 1, payment_method: 'test' };
+  let entry: IEntry = { entryId: 2, date: "20150505", description: 'test', amount: 220.2, categoryId: 1, payment_method: 'test' };
 
   let categories: { key: number, value: string }[] = categoriesCsv.split('\n')
     .slice(1)
@@ -28,7 +28,7 @@ describe('ItemDetail', () => {
     });
 
   //fixed response; stub for SQLiteService.getByCatAndDate, for use in MockNavParams
-  function getByCatAndDate(cat: number | number[], minDate: Date, maxDate: Date): Promise<DbRowsJoined[]> {
+  function getByCatAndDate(cat: number | number[], minDate: Date, maxDate: Date): Promise<IEntry[]> {
     return new Promise((resolve, reject) => window.setTimeout(() => resolve([entry]), 100));
   }
 
@@ -99,11 +99,11 @@ describe('ItemDetail', () => {
     fixture.whenStable().then(() => {
       fixture.detectChanges();
       expect(comp.storedDescription).toEqual(comp.item.description);
-      expect(comp.storedCatId).toEqual(comp.item.catId);
-      comp.item.catId = 2;
+      expect(comp.storedCategoryId).toEqual(comp.item.categoryId);
+      comp.item.categoryId = 2;
       comp.item.description = 'testtest';
       expect(comp.storedDescription).toBe('test');
-      expect(comp.storedCatId).toBe(1);
+      expect(comp.storedCategoryId).toBe(1);
     })
       .then(done);
   });

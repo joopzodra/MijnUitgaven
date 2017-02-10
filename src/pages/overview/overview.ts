@@ -8,6 +8,12 @@ import { NavController } from 'ionic-angular';
 
 export class OverviewPage {
 
+  yearmonth: string;
+
   constructor(public navCtrl: NavController) { }
+
+  yearMonthMessageHandler(event) {
+    this.yearmonth = event;
+  }
 
 }

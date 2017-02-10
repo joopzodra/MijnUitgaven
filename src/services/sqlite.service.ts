@@ -3,7 +3,7 @@ import { Subject } from 'rxjs';
 import { Platform } from 'ionic-angular';
 
 import { DexieDb } from '../helpers/dexie-db/dexie-db';
-import { DbRowsJoined } from '../datatypes/dbRowsJoined';
+import { IEntry } from '../datatypes/i-entry';
 
 /*
 * NB cat and cats is used as shorthand for category respectively categories
@@ -53,7 +53,7 @@ export class SQLiteService {
       .catch(err => console.log(err.message));
   }
 
-  getByCatAndDate(cat, minDate: string, maxDate: string): Promise<DbRowsJoined[]> {
+  getByCatAndDate(cat, minDate: string, maxDate: string): Promise<IEntry[]> {
 
     let query;
 
@@ -83,7 +83,7 @@ export class SQLiteService {
       });
   }
 
-  getItem(entryId): Promise<DbRowsJoined> {
+  getItem(entryId): Promise<IEntry> {
 
     let query = ['SELECT * FROM entries INNER JOIN categories ON entries.categoryId=categories.catId WHERE entries.entryId=', entryId].join('');
     return this.query(query)

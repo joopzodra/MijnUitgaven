@@ -9,7 +9,7 @@ import { EuroPipe } from '../../../pipes/euro.pipe';
 import { SQLiteService } from '../../../services/sqlite.service';
 import { entriesCsv } from '../../../helpers/dexie-db/entries-csv';
 import { categoriesCsv } from '../../../helpers/dexie-db/categories-csv';
-import { DbRowsJoined } from '../../../datatypes/dbRowsJoined';
+import { IEntry } from '../../../datatypes/i-entry';
 
 describe('Pie', () => {
 
@@ -35,7 +35,7 @@ describe('Pie', () => {
     categoryChangedSource = new Subject<number>();
 
     //always the same response; it doesn't test category and date, since this is tested in sqlite.service.spec
-    getByCatAndDate(cat: number | number[], minDate: Date, maxDate: Date): Promise<DbRowsJoined[]> {
+    getByCatAndDate(cat: number | number[], minDate: Date, maxDate: Date): Promise<IEntry[]> {
       //simulate inner join entries and categories
       let arr = entries.map(entry => entry);
       arr.forEach(entry => {
@@ -81,7 +81,7 @@ describe('Pie', () => {
 
     let entries = sqlService.getByCatAndDate(1, '', '').then(res => {
       expect(res.length).toBe(200);
-      expect(typeof res[0].category).toBe('string');
+      expect(typeof res[0].description).toBe('string');
     });
 
     let cats = sqlService.getCategories().then(res => {

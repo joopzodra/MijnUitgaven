@@ -3,7 +3,7 @@ import { NavController, NavParams, AlertController } from 'ionic-angular';
 import { NgForm } from '@angular/forms';
 
 import { SQLiteService } from '../../services/sqlite.service';
-import { DbRowsJoined } from '../../datatypes/dbRowsJoined';
+import { IEntry } from '../../datatypes/i-entry';
 import { colors } from '../../helpers/chartcolors';
 
 @Component({
@@ -13,11 +13,11 @@ import { colors } from '../../helpers/chartcolors';
 
 export class ItemDetail implements OnInit {
 
-  item: DbRowsJoined;
+  item: IEntry;
   private categories: { [x: number]: string };
   private catKeys: string[];
   private colorTable = colors;
-  storedCatId: number;
+  storedCategoryId: number;
   storedDescription: string;
   private saved = true;
 
@@ -29,7 +29,7 @@ export class ItemDetail implements OnInit {
     this.sqlite.getItem(entryId)
       .then(item => {
         this.item = item;
-        this.storedCatId = item.catId;
+        this.storedCategoryId = item.categoryId;
         this.storedDescription = item.description;
       });
 
@@ -45,18 +45,18 @@ export class ItemDetail implements OnInit {
     this.sqlite.getCategories()
       .then(catObj => {
         this.categories = catObj;
-        this.catKeys = Object.keys(catObj)
+        this.catKeys = Object.keys(catObj);
       });
   }
 
   private onSubmit(form: NgForm) {
-    this.sqlite.changeEntry(this.item.entryId, this.item.date, this.item.description, +this.item.catId);
-    form.resetForm({ itemCatId: this.item.catId, itemDescription: this.item.description });
+    this.sqlite.changeEntry(this.item.entryId, this.item.date, this.item.description, +this.item.categoryId);
+    form.resetForm({ itemCatId: this.item.categoryId, itemDescription: this.item.description });
     this.saved = true;
   }
 
   private cancel(form: NgForm) {
-    form.resetForm({ itemCatId: this.storedCatId, itemDescription: this.storedDescription });
+    form.resetForm({ itemCatId: this.storedCategoryId, itemDescription: this.storedDescription });
     this.saved = true;
   }
 

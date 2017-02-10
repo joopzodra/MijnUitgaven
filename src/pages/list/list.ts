@@ -3,16 +3,16 @@ import { NavController, NavParams } from 'ionic-angular';
 
 import { colors } from '../../helpers/chartcolors';
 import { ItemDetail } from '../itemdetail/itemdetail';
-import { DbRowsJoined } from '../../datatypes/dbRowsJoined';
+import { IEntry } from '../../datatypes/i-entry';
 
 @Component({
   selector: 'page-list',
   templateUrl: 'list.html'
 })
 
-export class ListPage implements OnInit {
+export class ListPage {
 
-  data: DbRowsJoined[];
+  data: IEntry[];
   sortBy: string;
   private catId: number;
   private categories: string[];
@@ -33,7 +33,6 @@ export class ListPage implements OnInit {
     });
 
     this.navParams.get('catsSource').subscribe(cats => this.categories = cats);
-
   }
 
   sort() {
@@ -45,21 +44,20 @@ export class ListPage implements OnInit {
     }
   }
 
-  sortByDateThenAmount(a: DbRowsJoined, b: DbRowsJoined) {
+  sortByDateThenAmount(a: IEntry, b: IEntry) {
 
     return a.date < b.date ? 1 : a.date > b.date ? -1 :
       a.amount < b.amount ? 1 : a.amount > b.amount ? -1 : 0;
   }
 
-  sortByAmountThenDate(a: DbRowsJoined, b: DbRowsJoined) {
+  sortByAmountThenDate(a: IEntry, b: IEntry) {
 
     return a.amount < b.amount ? -1 : a.amount > b.amount ? 1 :
       a.date < b.date ? 1 : a.date > b.date ? -1 : 0;
   }
 
-  itemSelected(item: DbRowsJoined) {
-    //let dataSource = this.navParams.get('dataSource');
-    this.navCtrl.push(ItemDetail, { /*dataSource,*/ entryId: item.entryId })
+  itemSelected(item: IEntry) {
+    this.navCtrl.push(ItemDetail, { entryId: item.entryId })
     .catch(err => console.log(err));
   }
 

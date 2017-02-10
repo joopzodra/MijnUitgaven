@@ -14,10 +14,9 @@ interface IEntry {
 }
 
 interface ICategory {
-  catId?: number; // Primary key. Optional (autoincremented)
+  catId: number; // Primary key. Optional (autoincremented)
   category: string
 }
-
 
 //NB. If you want to start with a fresh database, clear the browser data before running the app
 
@@ -30,8 +29,9 @@ export class DexieDb extends Dexie {
     .map(row => row.split(';')).slice(1) //don't use the first row with labels
     .map(row => ({ date: row[1], amount: +row[2], payment_method: row[3], description: row[4], categoryId: +row[5] }));
 
-  private cats = categoriesCsv.split('\n').slice(1) //don't use the first row with labels
-    .map(cat => ({ category: cat }));
+  private cats = categoriesCsv.split('\n')
+    .map(row => row.split(';')).slice(1) //don't use the first row with labels
+    .map(cat => ({ catId: +cat[0], category: cat[1] }));
 
   entries: Dexie.Table<IEntry, number>;
   categories: Dexie.Table<ICategory, number>;
@@ -40,7 +40,7 @@ export class DexieDb extends Dexie {
     super('MijnUitgaven');
     this.version(1).stores({
       entries: '++entryId, date, amount, payment_method, description, categoryId',
-      categories: '++catId, category'
+      categories: 'catId, category'
     });
 
     this.on('populate', () => {

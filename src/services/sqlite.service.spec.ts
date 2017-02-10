@@ -116,7 +116,7 @@ describe('SQLiteService', () => {
   it('getItem the expected item', done => {
     service.getItem(1).then(item => {
       expect(item.description).toBe('Haan ALMERE');
-      expect(item.category).toBe('vervoer');
+      expect(item.categoryId).toBe(4);
       done();
     });
   })

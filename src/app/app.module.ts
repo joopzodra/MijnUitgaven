@@ -6,7 +6,6 @@ import { SQLite } from 'ionic-native';
 import { MyApp } from './app.component';
 import { OverviewPage } from '../pages/overview/overview';
 import { Pie } from '../pages/overview/pie/pie';
-import { LineStatic } from '../pages/overview/line-static/line-static';
 import { Line } from '../pages/overview/line/line';
 import { ListPage } from '../pages/list/list';
 import { ItemDetail } from '../pages/itemdetail/itemdetail';
@@ -24,7 +23,6 @@ import { SQLiteService } from '../services/sqlite.service';
     MyApp,
     OverviewPage,
     Pie,
-    LineStatic,
     Line,
     ListPage,
     ItemDetail,

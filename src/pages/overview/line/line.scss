@@ -22,17 +22,28 @@ line-chart {
 
   path {
     fill: none;
-    stroke: steelblue;
+    stroke: map-get($colors, primary);
     stroke-width: 2;
   }
+
   .xAxis line, .yAxis line {
-    stroke:#000;
+    stroke:$lightgrey;
   }
+
   .xAxis text {
     text-anchor: middle;
   }
+
   .yAxis text {
     text-anchor: end;
   }
 
+  .yAxis .ticks {
+    stroke:$lightgrey;
+    opacity: 0.5;
+  }
+
+  circle {
+    fill: map-get($colors, primary);
+  }
 }

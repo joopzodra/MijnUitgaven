@@ -10,7 +10,7 @@ import { EuroPipe } from '../../pipes/euro.pipe';
 import { DatePipe, MonthPipe } from '../../pipes/date.pipe';
 import { entriesCsv } from '../../helpers/dexie-db/entries-csv';
 import { categoriesCsv } from '../../helpers/dexie-db/categories-csv';
-import { DbRowsJoined } from '../../datatypes/dbRowsJoined';
+import { IEntry } from '../../datatypes/i-entry';
 
 describe('ListPage', () => {
 
@@ -30,7 +30,7 @@ describe('ListPage', () => {
     });
 
   //fixed response; stub for SQLiteService.getByCatAndDate, for use in MockNavParams
-  function getByCatAndDate(cat: number | number[], minDate: Date, maxDate: Date): Promise<DbRowsJoined[]> {
+  function getByCatAndDate(cat: number | number[], minDate: Date, maxDate: Date): Promise<IEntry[]> {
     //simulate inner join entries and categories
     let arr = entries.map(entry => entry);
     arr.forEach(entry => {

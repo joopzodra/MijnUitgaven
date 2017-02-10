@@ -1,4 +1,5 @@
 const colors = {
+  0: '#ffffff',
   1: '#7cff86',
   2: '#580067',
   3: '#b8cd01',

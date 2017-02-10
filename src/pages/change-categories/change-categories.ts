@@ -31,6 +31,7 @@ export class ChangeCategoriesPage implements OnInit {
     this.sqlite.getCategories()
       .then(categories => {
         this.categories = [];
+        //categories[0] is 'nog te rubriceren', so we start with 1 and categories[1]
         for (let i = 1; i <= Object.keys(categories).length; i++) {
           this.categories.push({ key: i, value: categories[i] });
         }
