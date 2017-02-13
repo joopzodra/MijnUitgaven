@@ -10,7 +10,6 @@ import { BehaviorSubject } from 'rxjs';
 
 import { SQLiteService } from '../../../services/sqlite.service';
 /*import { colors } from '../../../helpers/chartcolors';*/
-import { ListPage } from '../../list/list';
 import { IEntry } from '../../../datatypes/i-entry';
 
 @Component({
