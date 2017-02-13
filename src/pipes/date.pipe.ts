@@ -23,9 +23,9 @@ export class DatePipe implements PipeTransform {
 
     if (!value) return;
 
-    let year = +value.slice(0, 4);
-    let month = +value.slice(4,6) - 1;
-    let day = +value.slice(6);
+    let year = +value.toString().slice(0, 4);
+    let month = +value.toString().slice(4,6) - 1;
+    let day = +value.toString().slice(6);
     let date = new Date(year, month, day);
     return this.nl.format('%e %B %Y') (date);
   };

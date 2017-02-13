@@ -6,7 +6,7 @@ import { categoriesCsv } from './categories-csv';
 
 interface IEntry {
   entryId?: number; // Primary key. Optional (autoincremented)
-  date: string;
+  date: number;
   amount: number;
   payment_method: string;
   description: string;
@@ -27,7 +27,7 @@ export class DexieDb extends Dexie {
 
   private data = entriesCsv.split('\n')
     .map(row => row.split(';')).slice(1) //don't use the first row with labels
-    .map(row => ({ date: row[1], amount: +row[2], payment_method: row[3], description: row[4], categoryId: +row[5] }));
+    .map(row => ({ date: +row[1], amount: +row[2], payment_method: row[3], description: row[4], categoryId: +row[5] }));
 
   private cats = categoriesCsv.split('\n')
     .map(row => row.split(';')).slice(1) //don't use the first row with labels
@@ -49,7 +49,7 @@ export class DexieDb extends Dexie {
     });
   }
 
-  getByCatAndDate(cat, minDate: string, maxDate: string) {
+  getByCatAndDate(cat, minDate: number, maxDate: number) {
 
     if (typeof cat === 'number') {
 

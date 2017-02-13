@@ -11,6 +11,7 @@ import { ListPage } from '../pages/list/list';
 import { ItemDetail } from '../pages/itemdetail/itemdetail';
 import { ChangeCategoriesPage } from '../pages/change-categories/change-categories';
 import { AboutPage } from '../pages/about/about';
+import { coloredBorderDirective } from '../helpers/colored-border.directive';
 
 import { EuroPipe } from '../pipes/euro.pipe';
 import { DatePipe } from '../pipes/date.pipe';
@@ -30,7 +31,8 @@ import { SQLiteService } from '../services/sqlite.service';
     EuroPipe,
     DatePipe,
     MonthPipe,
-    AboutPage
+    AboutPage,
+    coloredBorderDirective
   ],
   imports: [
     IonicModule.forRoot(MyApp, {

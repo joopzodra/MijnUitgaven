@@ -515,8 +515,6 @@ const entriesCsv = `entryId;date;amount;payment_method;description;categoryId
 514;20160528;-19.66;PIN-betaling;Lazuur FoodCommunity WAG;0
 515;20160528;-79.21;PIN-betaling;TINQ WAGENINGEN NUDE WAG;0
 516;20160528;-50;geldautomaat;ING WAGENINGEN;0
-517;20160529;-25.18;overboeking;IBAN: NL92RABO0100961819        BIC: RABONL2U                    Naam: Cornelissen Rothuizen KrolOmschrijving: xxxx-yyyy;0
-518;20160530;-725.07;doorlopende machtiging;Incassant: xxxxxxxxxxxxxxxxx Naam: Hypotheekbank           Machtiging: xxxxxxxxxxxxxxxxxOmschrijving: Verschuldigd bedra g PERIODE 05-2016               IBAN: NL76ABNA0256115761         Kenmerk: xxxxxxxxxxxxxxxxx      Voor: JAI CJ;0
-519;20160531;-39.55;doorlopende machtiging;Incassant: xxxxxxxxxxxxxxxxx Naam: REAAL SCHADEVERZEKERING    Machtiging: xxxxxxxxxxxxxxxxx       Omschrijving: Kenmerk  0000000 Omschrijving  SCHADEPAKKET      POL 11111 WIJZIGING IBAN: NL04ABNA0551256338        Kenmerk: xxxxxxxxxxx;0`;
+517;20160528;-725.07;doorlopende machtiging;Incassant: xxxxxxxxxxxxxxxxx Naam: Hypotheekbank           Machtiging: xxxxxxxxxxxxxxxxxOmschrijving: Verschuldigd bedra g PERIODE 05-2016               IBAN: NL76ABNA0256115761         Kenmerk: xxxxxxxxxxxxxxxxx      Voor: JAI CJ;0`;
 
 export { entriesCsv };

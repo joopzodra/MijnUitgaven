@@ -79,7 +79,7 @@ describe('Pie', () => {
 
   it('mockSqlite methods are o.k.', done => {
 
-    let entries = sqlService.getByCatAndDate(1, '', '').then(res => {
+    let entries = sqlService.getByCatAndDate(1, 0, 0).then(res => {
       expect(res.length).toBe(200);
       expect(typeof res[0].description).toBe('string');
     });

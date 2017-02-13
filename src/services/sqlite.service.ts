@@ -53,7 +53,7 @@ export class SQLiteService {
       .catch(err => console.log(err.message));
   }
 
-  getByCatAndDate(cat, minDate: string, maxDate: string): Promise<IEntry[]> {
+  getByCatAndDate(cat, minDate: number, maxDate: number): Promise<IEntry[]> {
 
     let query;
 
@@ -64,7 +64,7 @@ export class SQLiteService {
     }
 
     return this.query(query)
-      .then(sqlResponse => {console.log(sqlResponse); return this.sqlResponseToArray(sqlResponse)});
+      .then(sqlResponse => this.sqlResponseToArray(sqlResponse));
   }
 
   getCategories(): Promise<{ [x: number]: string }> {
@@ -90,11 +90,11 @@ export class SQLiteService {
       .then(sqlResponse => this.sqlResponseToArray(sqlResponse)[0]);
   }
 
-  changeEntry(entryId: number, date: string, description: string, categoryId: number): void {
+  changeEntry(entryId: number, date: number, description: string, categoryId: number): void {
 
     let query = ['UPDATE entries SET description="', description, '", categoryId=', categoryId, ' WHERE entryId=', entryId].join('');
     this.query(query)
-      .then(sqlResponse => this.entryChangedSource.next({ date: date, categoryId: categoryId }));
+      .then(sqlResponse => this.entryChangedSource.next({ date: date.toString(), categoryId: categoryId }));
   }
 
   changeCategory(catId: number, category: string): void {

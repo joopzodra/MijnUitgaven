@@ -20,27 +20,30 @@
     margin-bottom: 0;
   }
 
-  p.list-date {
-    display: inline-block;
+  .date-and-paymentmeth-container {
+    overflow: hidden;
+  }
+
+  .list-date {
     margin-bottom: 6px;
     font-style: italic;
     font-size: 1.3rem;
+    float: left;
   }
 
-  p.list-pay-meth {
-    display: inline-block;
+  .list-pay-meth {
     margin-bottom: 6px;
     float: right;
     font-size: 1.1rem;
   }
 
-  p.list-description {
+  .list-description {
     white-space: normal;
     font-size: 1.2rem;
     overflow: visible;
   }
 
-  h3.list-amount {
+  .list-amount {
     font-weight: bold;
   }
 

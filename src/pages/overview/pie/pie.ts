@@ -60,7 +60,7 @@ export class Pie {
       //this.refreshDataAndPie(this.month); //refreshCategories() already called refreshDataAndPie
 
       this.sqlite.entryChangedSource.subscribe(message => {
-        if (this.yearmonth === [message.date.slice(0, 4), message.date.slice(4, 6)].join('-')) {
+        if (this.yearmonth === [message.date.toString().slice(0, 4), message.date.toString().slice(4, 6)].join('-')) {
           this.refreshDataAndPie(this.yearmonth);
         }
       },
@@ -102,7 +102,7 @@ export class Pie {
     let maxDateMonth = yearAndMonth[1] !== '12' ? d3Format.format('02')(+yearAndMonth[1] + 1) : '01'
     let maxDate = maxDateYear + maxDateMonth + '01';
 
-    let data = this.sqlite.getByCatAndDate(cat, minDate, maxDate)
+    let data = this.sqlite.getByCatAndDate(cat, +minDate, +maxDate)
       .then(response => {
         this.dataSource.next(response);
         return response;
@@ -151,10 +151,6 @@ export class Pie {
 
       that.paths[i] = { d: node.attr('d'), fill: node.attr('fill'), stroke: node.attr('stroke') };
     })
-  }
-
-  border(itemKey) {
-    return +itemKey !== 0 ? "1px solid " + this.colorTable[+itemKey] : "1px solid #000"
   }
 
   toList(catId) {

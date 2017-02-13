@@ -1,6 +1,6 @@
 export interface IEntry {
   entryId: number,
-  date: string,
+  date: number,
   amount: number,
   payment_method: string,
   description: string,

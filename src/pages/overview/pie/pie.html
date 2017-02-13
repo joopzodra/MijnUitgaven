@@ -22,7 +22,7 @@
 
 <ion-list class="pie-list" *ngIf="rolledUpData&&catsSource.value">
   <ion-item *ngFor="let item of rolledUpData" (click)="toList(item.key)">
-    <ion-icon item-left class="ion-icon" [style.background-color]="colorTable[item.key]" [style.border]="border(item.key)">
+    <ion-icon item-left class="ion-icon" [style.background-color]="colorTable[item.key]" [myColoredBorder]="item.key">
     </ion-icon>
     <p>
       <span class="list-cat">{{catsSource.value[item.key]}}</span>

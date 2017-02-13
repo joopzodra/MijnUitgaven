@@ -20,12 +20,9 @@ import { IEntry } from '../../../datatypes/i-entry';
 export class Line {
 
   private currentDate = new Date(2016, 4, 31);
-  private previousMonth: string = this.currentDate.getMonth() !== 0 ? d3Format.format('02')(this.currentDate.getMonth()) : '12';
 
   // In Ionic datetime string is 1-based: january = 1, february = 2, etc.
   // Ionic datetime string format: "2016-04"
-  // d3.format("02")(4) fills space up to 2 digits using leading zero's (it returns a string)
-  //private yearmonth: string = [this.previousMonthYear, this.previousMonth].join('-'); //Ionic datetime string
   @Input() yearmonth: string;
 
   private dataSource = new BehaviorSubject<IEntry[]>([]);
@@ -100,7 +97,7 @@ export class Line {
     let minDate = this.timeRange[0].yearMonth + '01';
     let maxDate = this.timeRange[this.timeRange.length - 1].yearMonth + '32'; //we want to search till the end of the maxDate month; databases search dates lower than maxdate, so lower than something like "20160432"
 
-    let data = this.sqlite.getByCatAndDate(cat, minDate, maxDate)
+    let data = this.sqlite.getByCatAndDate(cat, +minDate, +maxDate)
       .then(response => {
         this.dataSource.next(response);
         return response;
@@ -108,7 +105,7 @@ export class Line {
 
     return data.then(data => {
       let rolledUpData = d3Collection.nest()
-        .key(entry => entry['date'].slice(0, 6))
+        .key(entry => entry['date'].toString().slice(0, 6))
         .rollup(arrayCategoryEntry => <any>d3Array.sum(arrayCategoryEntry.map(obj => -obj['amount'])))
         .entries(data);
 

@@ -19,7 +19,7 @@ describe('ItemDetail', () => {
   let fixture: ComponentFixture<ItemDetail>;
   let sqlService: SQLiteService;
 
-  let entry: IEntry = { entryId: 2, date: "20150505", description: 'test', amount: 220.2, categoryId: 1, payment_method: 'test' };
+  let entry: IEntry = { entryId: 2, date: 20150505, description: 'test', amount: 220.2, categoryId: 1, payment_method: 'test' };
 
   let categories: { key: number, value: string }[] = categoriesCsv.split('\n')
     .slice(1)

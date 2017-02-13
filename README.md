@@ -17,3 +17,7 @@ Contrary to what Ionic's documentation says, the database.executeSql function in
 
 ## D3 used for detached dom elements
 The charts are made with D3. D3 is used to create dummy dom elements whose attributes are used as input for creating dom elements in the Angular components. This is described in [Working with D3.js and Canvas: When and How](https://bocoup.com/weblog/d3js-and-canvas).
+
+##  Database
+On mobile devices the app used data stored in an SQLite database. In a web browser it populates a Dexie database (= Indexed DB).
+

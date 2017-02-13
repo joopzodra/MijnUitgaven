@@ -28,6 +28,10 @@
     height: 0;
   }
 
+  .itemdetails-inner {
+    width: 100%;
+  }
+
   .itemdetail-cat {
     font-size: 1.2rem;
     color: black;
@@ -35,27 +39,29 @@
     margin-bottom: 0;
   }
 
-
-  p.itemdetail-date {
-    display: inline-block;
+  .date-and-paymentmeth-container {
+    overflow: hidden;
+  }
+  
+  .itemdetail-date {    
     margin-bottom: 6px;
     font-style: italic;
     font-size: 1.3rem;
+    float: left;
   }
 
-  p.itemdetail-pay-meth {
-    display: inline-block;
+  .itemdetail-pay-meth {
     margin-bottom: 6px;
     float: right;
     font-size: 1.1rem;
   }
 
-  p.itemdetail-description {
+  .itemdetail-description {
     white-space: normal;
     font-size: 1.2rem;
   }
 
-  h3.itemdetail-amount {
+  .itemdetail-amount {
     font-weight: bold;
   }
 

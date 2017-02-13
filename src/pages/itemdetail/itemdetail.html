@@ -14,19 +14,19 @@
   <ion-card *ngIf="item">
     <ion-card-content class="itemdetails-outer">
 
-      <div class="icon-container">
-        <ion-icon *ngIf="categories" item-left [style.background-color]="colorTable[item.categoryId]">
+      <ion-item class="icon-container">
+        <ion-icon *ngIf="categories" item-left [style.background-color]="colorTable[item.categoryId]" [myColoredBorder]="item.categoryId">
         </ion-icon>
-      </div>
-      <div class="itemdetails-inner">
-        <p *ngIf="categories" class="itemdetail-cat">{{categories[item.categoryId] | uppercase}}</p>  
-        <div>
-          <p class="itemdetail-date">{{item.date | date}}</p>
-          <p class="itemdetail-pay-meth">{{item.payment_method}}</p>
+        <div class="itemdetails-inner">
+          <p *ngIf="categories" class="itemdetail-cat">{{categories[item.categoryId] | uppercase}}</p>  
+          <p class="date-and-paymentmeth-container">
+            <span class="itemdetail-date">{{item.date | date}}</span>
+            <span class="itemdetail-pay-meth">{{item.payment_method}}</span>
+          </p>
+          <p class="itemdetail-description">{{item.description}}</p>
+          <h3 class="itemdetail-amount">{{-item.amount | euro}}</h3>
         </div>
-        <p class="itemdetail-description">{{item.description}}</p>
-        <h3 class="itemdetail-amount">{{-item.amount | euro}}</h3>
-      </div>
+      </ion-item>
 
     </ion-card-content>
   </ion-card>
