@@ -63,6 +63,15 @@ describe('ChangeCategoriesPage', () => {
     sqlService = fixture.debugElement.injector.get(SQLiteService);
   });
 
-//no tests since testing the AlertControl, which is used inside the showPromptAlert method, is too complicated
+  it('on init there are 19 categories and they are shown in the view', done => {
+    fixture.detectChanges();
+    fixture.whenStable().then(() => {
+      fixture.detectChanges();
+      expect(comp.categories.length).toEqual(19);
+      let list = fixture.debugElement.nativeElement.querySelector('.list');
+      expect(list.childElementCount).toEqual(19);  
+    })
+      .then(done);
+  });
 
 });

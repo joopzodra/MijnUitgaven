@@ -11,6 +11,7 @@ import { DatePipe, MonthPipe } from '../../pipes/date.pipe';
 import { entriesCsv } from '../../helpers/dexie-db/entries-csv';
 import { categoriesCsv } from '../../helpers/dexie-db/categories-csv';
 import { IEntry } from '../../datatypes/i-entry';
+import { ColoredBorderDirective } from '../../helpers/colored-border.directive';
 
 describe('ListPage', () => {
 
@@ -53,7 +54,7 @@ describe('ListPage', () => {
   beforeEach(() => {
 
     TestBed.configureTestingModule({
-      declarations: [ListPage, EuroPipe, DatePipe, MonthPipe],
+      declarations: [ListPage, EuroPipe, DatePipe, MonthPipe, ColoredBorderDirective],
       providers: [
         DomController,
         Form,

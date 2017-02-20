@@ -5,7 +5,7 @@ import { colors } from './chartcolors';
 @Directive({
   selector: '[myColoredBorder]'
 })
-export class coloredBorderDirective {
+export class ColoredBorderDirective {
 
   @Input('myColoredBorder') categoryId: string;
 

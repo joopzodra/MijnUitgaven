@@ -19,10 +19,17 @@ export class MyApp {
     platform.ready().then(() => {
       StatusBar.styleDefault();
       Splashscreen.hide();
-   });
+    });
   }
 
   openPage(page) {
+
+    //Don't stack menu pages
+    let previousPage = this.navCtrl.last().instance.constructor.name;
+    if (previousPage === 'ChangeCategoriesPage' || previousPage === 'AboutPage') {
+      this.navCtrl.pop();
+    }
+
     if (page === 'changeCategories') {
       this.navCtrl.push(ChangeCategoriesPage);
     }

@@ -12,6 +12,7 @@ import { DatePipe } from '../../pipes/date.pipe';
 import { SQLiteService } from '../../services/sqlite.service';
 import { categoriesCsv } from '../../helpers/dexie-db/categories-csv';
 import { IEntry } from '../../datatypes/i-entry';
+import { ColoredBorderDirective } from '../../helpers/colored-border.directive';
 
 describe('ItemDetail', () => {
 
@@ -60,7 +61,7 @@ describe('ItemDetail', () => {
   beforeEach(() => {
 
     TestBed.configureTestingModule({
-      declarations: [ItemDetail, EuroPipe, DatePipe],
+      declarations: [ItemDetail, EuroPipe, DatePipe, ColoredBorderDirective],
       providers: [
         DomController,
         Form,

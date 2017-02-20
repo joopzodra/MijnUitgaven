@@ -1,4 +1,7 @@
+import { TestBed } from '@angular/core/testing';
 import { Platform } from 'ionic-angular';
+import { ConfigMock, NavMock, PlatformMock, DomControllerMock } from '../mocks';
+
 
 import { SQLiteService } from './sqlite.service';
 /*import { entriesCsv } from '../helpers/dexie-db/entries-csv';
@@ -18,8 +21,10 @@ describe('SQLiteService', () => {
     originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
     jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
 
-    let platform = { ready: () => Promise.resolve('true') };
-    service = new SQLiteService(platform as Platform);
+    let platform = new Platform();
+    platform.ready = () => Promise.resolve('true');
+
+    service = new SQLiteService(platform);
     let db = window.setInterval(() => {
       if (service.db) {
         clearInterval(db);
@@ -32,7 +37,24 @@ describe('SQLiteService', () => {
         jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout;
     });
 
-  //These tests for teh query method of SQLiteService where used in an earlier version of the app, when a WebSql database was used in the browser. Now with Dexie / Indexed DB these tests can't be used.
+
+  it('getCategories returns an object with categories', done => {
+    service.getCategories().then(response => {
+      expect(response[1]).toBe('woonlasten');
+      done();
+    });
+  });
+
+  it('getItem returns the expected item', done => {
+    service.getItem(1).then(item => {
+      expect(item.description).toBe('Haan ALMERE');
+      expect(item.categoryId).toBe(4);
+      done();
+    });
+  });
+
+
+  //These tests are using the query method of SQLiteService. They where used in an earlier version of the app, when a WebSql database was used in the browser, which has an identical API as SQLite. Now with Dexie / Indexed DB these tests don't give information about correct query-handling in SQLite.
 
   /*  describe('query method', () => {
   
@@ -77,7 +99,7 @@ describe('SQLiteService', () => {
   
     });*/
 
-  //Indexed DB doesn't work as expected. Only simple queries get a quick response. Therefore skip these tests
+  //In Indexed DB only simple queries get a quick response. Therefore skip these tests
 
   /*  it('getByCatAndDate returns the expected category', done => {
       service.getByCatAndDate(2, new Date(2015, 4, 30), new Date(2015, 5, 30)).then(response => {
@@ -104,23 +126,6 @@ describe('SQLiteService', () => {
         done();
       });
     });*/
-
-
-  it('getCategories returns an object with categories', done => {
-    service.getCategories().then(response => {
-      expect(response[1]).toBe('woonlasten');
-      done();
-    });
-  });
-
-  it('getItem the expected item', done => {
-    service.getItem(1).then(item => {
-      expect(item.description).toBe('Haan ALMERE');
-      expect(item.categoryId).toBe(4);
-      done();
-    });
-  })
-
 
   /*  describe('changeEntry method', () => {
   

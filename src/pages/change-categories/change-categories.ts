@@ -12,7 +12,7 @@ import { SQLiteService } from '../../services/sqlite.service';
 export class ChangeCategoriesPage implements OnInit {
 
   private colorTable: { [x: number]: string } = colors;
-  private categories: { key: number, value: string }[];
+  categories: { key: number, value: string }[];
 
   constructor(private sqlite: SQLiteService, private alertCtrl: AlertController) { }
 

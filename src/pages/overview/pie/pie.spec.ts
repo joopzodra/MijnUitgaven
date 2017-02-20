@@ -10,6 +10,7 @@ import { SQLiteService } from '../../../services/sqlite.service';
 import { entriesCsv } from '../../../helpers/dexie-db/entries-csv';
 import { categoriesCsv } from '../../../helpers/dexie-db/categories-csv';
 import { IEntry } from '../../../datatypes/i-entry';
+import { ColoredBorderDirective } from '../../../helpers/colored-border.directive';
 
 describe('Pie', () => {
 
@@ -24,8 +25,8 @@ describe('Pie', () => {
 
   let categories: { key: number, value: string }[] = categoriesCsv.split('\n')
     .slice(1)
-    .map((row, i) => {
-      return { key: i + 1, value: row };
+    .map((row) => {      
+      return { key: +row.split(';')[0], value: row.split(';')[1] };
     });
 
 
@@ -56,7 +57,7 @@ describe('Pie', () => {
   beforeEach(() => {
 
     TestBed.configureTestingModule({
-      declarations: [Pie, MonthPipe, EuroPipe],
+      declarations: [Pie, MonthPipe, EuroPipe, ColoredBorderDirective],
       providers: [
         Form,
         { provide: App, useClass: ConfigMock },
@@ -97,7 +98,7 @@ describe('Pie', () => {
     fixture.whenStable().then(() => {
       fixture.detectChanges();
       expect(comp.paths.length).toBeGreaterThan(3);
-      expect(Object.keys(comp.catsSource.value).length).toEqual(18);
+      expect(Object.keys(comp.catsSource.value).length).toEqual(19);
     })
       .then(done);
   });
