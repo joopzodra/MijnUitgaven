@@ -3,9 +3,14 @@
     <ion-title>
       Overzicht
     </ion-title>
-    <button ion-button menuToggle right>
-      <ion-icon name="menu"></ion-icon>
-    </button>
+    <ion-buttons end>
+    <button ion-button class="add-button" (click)="addEntry()">
+        Uitgave toevoegen
+      </button>
+      <button class="menu-button" ion-button menuToggle>
+        <ion-icon name="menu"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 

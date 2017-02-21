@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { NavParams, AlertController } from 'ionic-angular';
 import { NgForm } from '@angular/forms';
 
@@ -7,31 +7,26 @@ import { IEntry } from '../../datatypes/i-entry';
 import { colors } from '../../helpers/chartcolors';
 
 @Component({
-  selector: 'itemdetail',
-  templateUrl: 'itemdetail.html'
+  selector: 'new-entry',
+  templateUrl: 'new-entry.html'
 })
 
-export class ItemDetail implements OnInit {
+export class NewEntry {
 
-  item: IEntry;
+  entry: IEntry;
   private categories: { [x: number]: string };
   private catKeys: string[];
   private colorTable = colors;
-  storedCategoryId: number;
-  storedDescription: string;
   private saved = true;
+
+  newEntryForm: NgForm;
+  @ViewChild('newEntryForm') currentForm: NgForm;
 
   constructor(private navParams: NavParams, private sqlite: SQLiteService, private alertCtrl: AlertController) { }
 
   ngOnInit() {
 
-    let entryId = +this.navParams.get('entryId');
-    this.sqlite.getItem(entryId)
-      .then(item => {
-        this.item = item;
-        this.storedCategoryId = item.categoryId;
-        this.storedDescription = item.description;
-      });
+    this.entry = {entryId: null, date: null, amount: null, payment_method: null, description: null, categoryId: null}
 
     this.refreshCategories();
 
@@ -50,13 +45,13 @@ export class ItemDetail implements OnInit {
   }
 
   private onSubmit(form: NgForm) {
-    this.sqlite.changeEntry(this.item.entryId, this.item.date, this.item.description, +this.item.categoryId);
-    form.resetForm({ itemCatId: this.item.categoryId, itemDescription: this.item.description });
+    this.sqlite.changeEntry(this.entry.entryId, this.entry.date, this.entry.description, +this.entry.categoryId);
+    form.resetForm({ entryCatId: this.entry.categoryId, entryDescription: this.entry.description });
     this.saved = true;
   }
 
   private cancel(form: NgForm) {
-    form.resetForm({ itemCatId: this.storedCategoryId, itemDescription: this.storedDescription });
+    form.resetForm();
     this.saved = true;
   }
 
@@ -87,5 +82,18 @@ export class ItemDetail implements OnInit {
       this.showAlert();
     }
   }
+
+ngAfterViewChecked() {
+  this.formChanged();
+}
+
+formChanged() {
+  if (this.currentForm === this.newEntryForm) { return; }
+  this.newEntryForm = this.currentForm;
+  if (this.newEntryForm) {
+    this.newEntryForm.valueChanges
+      .subscribe(data => console.log(data));
+  }
+}
 
 }

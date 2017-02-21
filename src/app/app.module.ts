@@ -12,6 +12,7 @@ import { ItemDetail } from '../pages/itemdetail/itemdetail';
 import { ChangeCategoriesPage } from '../pages/change-categories/change-categories';
 import { AboutPage } from '../pages/about/about';
 import { ColoredBorderDirective } from '../helpers/colored-border.directive';
+import { NewEntry } from '../pages/new-entry/new-entry';
 
 import { EuroPipe } from '../pipes/euro.pipe';
 import { DatePipe } from '../pipes/date.pipe';
@@ -32,7 +33,8 @@ import { SQLiteService } from '../services/sqlite.service';
     DatePipe,
     MonthPipe,
     AboutPage,
-    ColoredBorderDirective
+    ColoredBorderDirective,
+    NewEntry
   ],
   imports: [
     IonicModule.forRoot(MyApp, {
@@ -47,7 +49,8 @@ import { SQLiteService } from '../services/sqlite.service';
     ListPage,
     ItemDetail,
     ChangeCategoriesPage,
-    AboutPage
+    AboutPage,
+    NewEntry
   ],
   providers: [
   {provide: ErrorHandler, useClass: IonicErrorHandler},

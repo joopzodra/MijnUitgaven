@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 
+import { NewEntry } from '../new-entry/new-entry';
+
 @Component({
   selector: 'page-overview',
   templateUrl: 'overview.html'
@@ -16,4 +18,7 @@ export class OverviewPage {
     this.yearmonth = event;
   }
 
+  addEntry() {
+    this.navCtrl.push(NewEntry);
+  }
 }
