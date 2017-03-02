@@ -89,16 +89,16 @@ describe('ListPage', () => {
     fixture.detectChanges();
     fixture.whenStable().then(() => {
       fixture.detectChanges();
-      comp.sortBy = 'date';
-      comp.sort();
-      for (let i = 0; i < comp.data.length - 1; i++) {
-        expect(+comp.data[i].date).toBeGreaterThanOrEqual(+comp.data[i + 1].date);
+      comp['sortBy'] = 'date';
+      comp['sort']();
+      for (let i = 0; i < comp['data'].length - 1; i++) {
+        expect(+comp['data'][i].date).toBeGreaterThanOrEqual(+comp['data'][i + 1].date);
       }
-        comp.sortBy = 'amount';
-        comp.sort();
-        for (let i = 0; i < comp.data.length - 1; i++) {
+        comp['sortBy'] = 'amount';
+        comp['sort']();
+        for (let i = 0; i < comp['data'].length - 1; i++) {
           //reversed because of negative amounts (sign is only reversed in html-template)
-          expect(comp.data[i + 1].amount).toBeGreaterThanOrEqual(comp.data[i].amount)
+          expect(comp['data'][i + 1].amount).toBeGreaterThanOrEqual(comp['data'][i].amount)
         }      
     })
     .then(done);

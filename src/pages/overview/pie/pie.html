@@ -1,12 +1,13 @@
 <div class="pie-month-amount">
   <ion-item>
-    <ion-datetime displayFormat="MMMM YYYY" pickerFormat="MMMM YYYY" min="2015-06-01" max="2016-05-31" monthNames="januari,februari,maart,april,mei,juni,juli,augustus,september,oktober,november,december" cancelText="Annuleer" doneText="OK" [(ngModel)]="yearmonth" (ionChange)="refreshDataAndPie(yearmonth)"></ion-datetime>
+    <ion-datetime displayFormat="MMMM YYYY" pickerFormat="MMMM YYYY" min="2015-05-01" max="2016-06-30" monthNames="januari,februari,maart,april,mei,juni,juli,augustus,september,oktober,november,december" cancelText="Annuleer" doneText="OK" [(ngModel)]="yearmonth" (ionChange)="refreshDataAndPie(yearmonth)"></ion-datetime>
     <ion-icon item-content name="arrow-down"></ion-icon>
-    <ion-icon item-right><p>totaal uitgegeven: </p><h3 *ngIf="monthTotal">{{monthTotal | euro}}</h3></ion-icon>
+    <ion-icon item-right *ngIf="monthTotal"><p>totaal uitgegeven: </p><h3>{{monthTotal | euro}}</h3></ion-icon>
+    <ion-icon item-right *ngIf="!monthTotal"><p>totaal uitgegeven: </p><h3>{{ 0 | euro}}</h3></ion-icon>
   </ion-item>
 </div>
 
-<div class="pie-chart-extra-container">
+<div class="pie-chart-extra-container" *ngIf="paths.length">
 <div class="pie-chart-container">
 
   <svg [attr.viewBox]="'0 0 ' + (width + margin.left + margin.right) + ' ' + (height + margin.top + margin.bottom)">
@@ -19,6 +20,8 @@
   </svg>
 </div>
 </div>
+
+<p *ngIf="!paths.length">Nog geen uitgaven in deze maand</p>
 
 <ion-list class="pie-list" *ngIf="rolledUpData&&catsSource.value">
   <ion-item *ngFor="let item of rolledUpData" (click)="toList(item.key)">

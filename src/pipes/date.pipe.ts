@@ -2,9 +2,6 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 import * as d3TimeFormat from 'd3-time-format';
 
-
-
-
 @Pipe({name: 'date'})
 export class DatePipe implements PipeTransform {
 
@@ -19,7 +16,7 @@ export class DatePipe implements PipeTransform {
     shortMonths: ['jan', 'feb', 'mrt', 'apr', 'mei', 'juni', 'juli', 'aug', 'sept', 'okt', 'nov', 'dec']
   });
 
-  transform(value: string): string {
+  public transform(value: string): string {
 
     if (!value) return;
 
@@ -45,7 +42,7 @@ export class MonthPipe implements PipeTransform {
     shortMonths: ['jan', 'feb', 'mrt', 'apr', 'mei', 'juni', 'juli', 'aug', 'sept', 'okt', 'nov', 'dec']
   });
 
-  transform(value: string): string {
+  public transform(value: string): string {
 
     if (!value) return;
 

@@ -18,8 +18,6 @@ import { IEntry } from '../../../datatypes/i-entry';
 })
 export class Line {
 
-  private currentDate = new Date(2016, 4, 31);
-
   // In Ionic datetime string is 1-based: january = 1, february = 2, etc.
   // Ionic datetime string format: "2016-04"
   @Input() yearmonth: string;
@@ -27,24 +25,22 @@ export class Line {
   private dataSource = new BehaviorSubject<IEntry[]>([]);
   private allCats = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]; //the database contains 18 categories
 
-  margin = { top: 20, bottom: 25, left: 60, right: 20 };
-  width = 500;
-  height = 300;
+  private margin = { top: 20, bottom: 25, left: 60, right: 20 };
+  private width = 500;
+  private height = 300;
 
-  data = [8, 15, 16, 23, 42, 14, 8, 15, 16, 23, 42, 14];
+  private dataContainer: d3.Selection<d3.BaseType, {}, null, undefined>;
+  private //paths: { d: string, fill: string }[] = [];
 
-  dataContainer: d3.Selection<d3.BaseType, {}, null, undefined>;
-  //paths: { d: string, fill: string }[] = [];
+  private timeRange: { yearMonth: string, monthName: string, year: string }[];
+  private dataObjects: any; //a specific typing results in conflicting d3 typing rules
+  private linePath: string;
+  private circles: { cx: number, cy: number, r: number }[] = [];
 
-  timeRange: { yearMonth: string, monthName: string, year: string }[];
-  dataObjects: any; //a specific typing results in conflicting d3 typing rules
-  linePath: string;
-  circles: { cx: number, cy: number, r: number }[] = [];
-
-  xTicksPaths: { x1: number, y1: number, x2: number, y2: number }[] = [];
-  xLabels: { text: string, x: number, y: number }[] = [];
-  yTicksPaths: { x1: number, y1: number, x2: number, y2: number }[] = [];
-  yLabels: { text: string, x: number, y: number }[] = [];
+  private xTicksPaths: { x1: number, y1: number, x2: number, y2: number }[] = [];
+  private xLabels: { text: string, x: number, y: number }[] = [];
+  private yTicksPaths: { x1: number, y1: number, x2: number, y2: number }[] = [];
+  private yLabels: { text: string, x: number, y: number }[] = [];
 
   constructor(private platform: Platform, private sqlite: SQLiteService) { }
 
@@ -67,7 +63,7 @@ export class Line {
     }
   }
 
-  sixMonthArray(yearmonth) {
+  private sixMonthArray(yearmonth) {
 
     let yearAndMonth = yearmonth.split('-');
     let yearString = yearAndMonth[0];
@@ -91,7 +87,7 @@ export class Line {
     return monthArray
   }
 
-  getData(cat: number | number[], yearmonth: string) {
+  private getData(cat: number | number[], yearmonth: string) {
 
     let minDate = this.timeRange[0].yearMonth + '01';
     let maxDate = this.timeRange[this.timeRange.length - 1].yearMonth + '32'; //we want to search till the end of the maxDate month; databases search dates lower than maxdate, so lower than something like "20160432"
@@ -102,27 +98,29 @@ export class Line {
         return response;
       });
 
+    let rolledUpData = [];
+
     return data.then(data => {
+
+
       let rolledUpData = d3Collection.nest()
         .key(entry => entry['date'].toString().slice(0, 6))
-        .rollup(arrayCategoryEntry => <any>d3Array.sum(arrayCategoryEntry.map(obj => -obj['amount'])))
+        .rollup(arrayCategoryEntry => <any>d3Array.sum(arrayCategoryEntry.map(obj => obj['amount'])))
         .entries(data);
 
-      //fill from left with empty values, because we use six points on x-axis
-      while (rolledUpData.length < 6) {
-        rolledUpData.unshift({ key: null, values: null, value: null });
-      }
-
-      return this.dataObjects = rolledUpData.map((d, i) => ({ date: this.timeRange[i].yearMonth, value: d.value }))
-    })
+      return this.dataObjects = this.timeRange.map((date,i) => {
+        let monthRolledUp = rolledUpData.filter(data => data.key === date.yearMonth)[0];
+        return monthRolledUp ? {date: monthRolledUp.key, value: monthRolledUp.value} : {date: date.yearMonth, value: 0}; 
+      });
+    });
   }
 
   //We want the line and x-axis ticks not to start from the y-axis, but shifted half a month width the right  
-  shiftX(x) {
+  private shiftX(x) {
     return (x(this.dataObjects[1]['date']) - x(this.dataObjects[0]['date'])) / 2;
   }
 
-  drawDetachedChart() {
+  private drawDetachedChart() {
 
     let x = d3Scale.scaleBand()
       .domain(this.timeRange.map((m) => m.yearMonth))
@@ -160,7 +158,7 @@ export class Line {
     this.yAxis(y);
   }
 
-  setPathAttr() {
+  private setPathAttr() {
     let elements = this.dataContainer.selectAll('customLine');
     let that = this;
 
@@ -170,7 +168,7 @@ export class Line {
     })
   }
 
-  setCircleAttr() {
+  private setCircleAttr() {
     let elements = this.dataContainer.selectAll('customCircle');
     let that = this;
 
@@ -180,7 +178,7 @@ export class Line {
     })
   }
 
-  xAxis(x, shiftX) {
+  private xAxis(x, shiftX) {
     let tickSize = 6;
     let tickPadding = 15;
     let ticks = this.timeRange; //don't use last tick because we will shift ticks to the right;
@@ -190,7 +188,7 @@ export class Line {
     ticks.forEach((d, i) => this.xLabels[i] = { text: d.monthName, x: x(d.yearMonth) + shiftX, y: this.height + tickSize + tickPadding });
   }
 
-  yAxis(y) {
+  private yAxis(y) {
     let tickCount = 6;
     let tickSize = 6;
     let tickPadding = 7;

@@ -67,7 +67,7 @@ describe('ChangeCategoriesPage', () => {
     fixture.detectChanges();
     fixture.whenStable().then(() => {
       fixture.detectChanges();
-      expect(comp.categories.length).toEqual(19);
+      expect(comp['categories'].length).toEqual(19);
       let list = fixture.debugElement.nativeElement.querySelector('.list');
       expect(list.childElementCount).toEqual(19);  
     })

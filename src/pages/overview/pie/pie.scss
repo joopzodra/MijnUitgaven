@@ -1,3 +1,7 @@
+.datetime {
+  padding: 11px 8px 11px 0px;
+}
+
 .pie-month-amount {
 
   ion-icon[name='arrow-down'] {
@@ -7,6 +11,10 @@
   h3 {
     display: inline-block;
     font-weight: bold;
+  }
+
+  .item-ios [item-right] {
+    margin-right: 0;
   }
 }
 
@@ -36,8 +44,14 @@
 
 .pie-list {
 
+  margin: -1px 0 20px 0;
+
   .item-block {
     min-height: 3.4rem;
+
+    &:first-child, &:last-child {
+      border: none;
+    }
   }
 
   .ion-icon {

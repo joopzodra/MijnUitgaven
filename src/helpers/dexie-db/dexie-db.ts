@@ -3,15 +3,7 @@ import { Subject } from 'rxjs';
 
 import { entriesCsv } from './entries-csv';
 import { categoriesCsv } from './categories-csv';
-
-interface IEntry {
-  entryId?: number; // Primary key. Optional (autoincremented)
-  date: number;
-  amount: number;
-  payment_method: string;
-  description: string;
-  categoryId: number
-}
+import { IEntry } from '../../datatypes/i-entry';
 
 interface ICategory {
   catId: number; // Primary key. Optional (autoincremented)
@@ -22,8 +14,8 @@ interface ICategory {
 
 export class DexieDb extends Dexie {
 
-  entryChangedSource = new Subject<{ date: string, categoryId: number }>();
-  categoryChangedSource = new Subject<number>();
+  public entryChangedSource = new Subject<{ date: string, categoryId: number }>();
+  public categoryChangedSource = new Subject<number>();
 
   private data = entriesCsv.split('\n')
     .map(row => row.split(';')).slice(1) //don't use the first row with labels
@@ -33,8 +25,8 @@ export class DexieDb extends Dexie {
     .map(row => row.split(';')).slice(1) //don't use the first row with labels
     .map(cat => ({ catId: +cat[0], category: cat[1] }));
 
-  entries: Dexie.Table<IEntry, number>;
-  categories: Dexie.Table<ICategory, number>;
+  private entries: Dexie.Table<IEntry, number>;
+  private categories: Dexie.Table<ICategory, number>;
 
   constructor() {
     super('MijnUitgaven');
@@ -49,35 +41,35 @@ export class DexieDb extends Dexie {
     });
   }
 
-  getByCatAndDate(cat, minDate: number, maxDate: number) {
+  public getByCatAndDate(cat, minDate: number, maxDate: number) {
 
     if (typeof cat === 'number') {
 
       return this.entries.where('date').between(minDate, maxDate)
-      .filter(entry => entry.categoryId === cat)
-      .toArray()
-      .catch(err => console.log(err))
+        .filter(entry => entry.categoryId === cat)
+        .toArray()
+        .catch(err => console.log(err))
     }
 
     return this.entries.where('date').between(minDate, maxDate).toArray()
-    .catch(err => console.log(err));
+      .catch(err => console.log(err));
   }
 
-  getCategories() {
+  public getCategories() {
 
-    return this.categories.where('catId').aboveOrEqual(0).toArray().then(res => {
+    return this.categories.where('catId').aboveOrEqual(0).toArray().then(response => {
       let catObj = {};
-      let length = res.length;
+      let length = response.length;
       for (let i = 0; i < length; i++) {
-        let item = res[i];
-        catObj[item.catId] = item.category;
+        let cat = response[i];
+        catObj[cat.catId] = cat.category;
       }
       return catObj
     })
-    .catch(err => console.log(err));
+      .catch(err => console.log(err));
   }
 
-  getItem(entryId) {
+  public getEntry(entryId) {
 
     return this.entries.where('entryId').equals(entryId).first(entry => {
       return this.categories.where('catId').equals(entry.categoryId).first(cat => {
@@ -88,16 +80,32 @@ export class DexieDb extends Dexie {
     });
   }
 
-  changeEntry(entryId: number, date: string, description: string, categoryId: number): void {
+  public changeEntry(entryId: number, date: number, amount: number, payment_method: string, description: string, categoryId: number): void {
 
-    this.entries.update(entryId, { description: description, categoryId: categoryId })
+    this.entries.update(entryId, { amount: amount, date: date, categoryId: categoryId, description: description, payment_method: payment_method })
       .then(response => {
-        this.entryChangedSource.next({ date: date, categoryId: categoryId });
-        //return response;
+        this.entryChangedSource.next({ date: date.toString(), categoryId: categoryId });
       });
   }
 
-  changeCategory(catId: number, category: string): void {
+  public deleteEntry(entryId, date, categoryId) {
+    this.entries.delete(entryId)
+      .then(response => {
+        this.entryChangedSource.next({ date: date.toString(), categoryId: categoryId });
+      });
+  }
+
+  public newEntry(date, amount, payment_method, description, categoryId) {
+    let query = ['INSERT INTO entries (date, amount, payment_method, description, categoryId) VALUES (', date, ',', amount, ',', payment_method, ',', description, ',', categoryId, ')'].join('');
+
+    return this.entries.add({ date: date, amount: amount, payment_method: payment_method, description: description, categoryId: categoryId })
+      .then(response => {
+        this.entryChangedSource.next({ date: date.toString(), categoryId: categoryId });
+        return response;
+      });
+  }
+
+  public changeCategory(catId: number, category: string): void {
 
     this.categories.update(catId, { category: category })
       .then(response => this.categoryChangedSource.next(catId));

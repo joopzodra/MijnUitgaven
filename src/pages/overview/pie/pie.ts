@@ -23,14 +23,14 @@ import { IEntry } from '../../../datatypes/i-entry';
 
 export class Pie {
 
-  private currentDate = new Date(2016, 4, 31);
-  private previousMonth: string = this.currentDate.getMonth() !== 0 ? d3Format.format('02')(this.currentDate.getMonth()) : '12';
-  private previousMonthYear: string = this.currentDate.getMonth() !== 0 ? this.currentDate.getFullYear().toString() : (this.currentDate.getFullYear() - 1).toString();
+  private currentDate = new Date(2016, 4, 31, 12);
+  private currentMonth: string = d3Format.format('02')(this.currentDate.getMonth() + 1);
+  private currentYear: string = this.currentDate.getFullYear().toString();
 
   // In Ionic datetime string is 1-based: january = 1, february = 2, etc.
   // Ionic datetime string format: "2016-04"
   // d3.format("02")(4) fills space up to 2 digits using leading zero's (it returns a string)
-  private yearmonth: string = [this.previousMonthYear, this.previousMonth].join('-'); //Ionic datetime string
+  private yearmonth: string = [this.currentYear, this.currentMonth].join('-'); //Ionic datetime string
   @Output() yearMonthMessage = new EventEmitter<string>();
 
   private dataSource = new BehaviorSubject<IEntry[]>([]);
@@ -74,7 +74,7 @@ export class Pie {
 
   }
 
-  refreshDataAndPie(month) {
+  private refreshDataAndPie(month) {
 
     this.yearMonthMessage.emit(month);
 
@@ -85,7 +85,7 @@ export class Pie {
       });
   }
 
-  refreshCategories() {
+  private refreshCategories() {
     this.sqlite.getCategories().then(cats => {
       this.catsSource.next(cats);
       //when cats changes, also IEntries changes, so data needs to be refreshed because the changed category names are used in listpag
@@ -93,7 +93,7 @@ export class Pie {
     });
   }
 
-  getData(cat: number | number[], yearmonth: string) {
+  private getData(cat: number | number[], yearmonth: string) {
 
     let yearAndMonth = yearmonth.split('-');
 
@@ -111,15 +111,14 @@ export class Pie {
     return data.then(data => {
       return this.rolledUpData = d3Collection.nest()
         .key(entry => entry['categoryId'])
-        .rollup(arrayCategoryEntry => <any>d3Array.sum(arrayCategoryEntry.map(obj => -obj['amount'])))//row[2] negative because amount is negative and in the list we want to work with positive values
-        //.rollup(function(leaves) { return {"length": leaves.length, "total_time": d3.sum(leaves, function(d) {return parseFloat(d.time);})} })
+        .rollup(arrayCategoryEntry => <any>d3Array.sum(arrayCategoryEntry.map(obj => obj['amount'])))
         .entries(data)
         .sort((a, b) => d3Array.descending(a.value, b.value));
     })
       .then(rolledUpData => this.monthTotal = rolledUpData.reduce((a, b) => a + b.value, 0));
   }
 
-  createDetachedPie() {
+  private createDetachedPie() {
 
     let dataKeys = this.rolledUpData.map(dataObj => dataObj.key);
     let dataValues = this.rolledUpData.map(dataObj => dataObj.value);
@@ -141,7 +140,7 @@ export class Pie {
       .attr('stroke', (d, i) => {return dataKeys[i] !== "0" ? colors[dataKeys[i]] : "#000"});
   }
 
-  setPathsData() {
+  private setPathsData() {
     let elements = this.detachedContainer.selectAll('customPie');
     let that = this;
     that.paths = [];
@@ -153,7 +152,7 @@ export class Pie {
     })
   }
 
-  toList(catId) {
+  private toList(catId) {
     let dataSource = this.dataSource;
     let catsSource = this.catsSource;
     this.navCtrl.push(ListPage, { dataSource, catId, catsSource, month: this.yearmonth })

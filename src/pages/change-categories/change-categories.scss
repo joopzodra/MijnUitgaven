@@ -1,3 +1,8 @@
+/* Ionic alert is an page overlay */
+.alert-message.warning {
+  color: map-get($colors, danger);
+}
+
 .change-cats {
 
   ion-icon {
@@ -7,4 +12,6 @@
     min-height: 0;
     min-width: 0 !important;
   }
+
+
 }

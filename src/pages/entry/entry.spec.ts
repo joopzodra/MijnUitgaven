@@ -14,7 +14,7 @@ import { categoriesCsv } from '../../helpers/dexie-db/categories-csv';
 import { IEntry } from '../../datatypes/i-entry';
 import { ColoredBorderDirective } from '../../helpers/colored-border.directive';
 
-describe('ItemDetail', () => {
+/*describe('ItemDetail', () => {
 
   let comp: ItemDetail;
   let fixture: ComponentFixture<ItemDetail>;
@@ -55,7 +55,7 @@ describe('ItemDetail', () => {
       return new Promise((resolve, reject) => window.setTimeout(() => resolve(catObj), 100));
     }
 
-    /*changeEntry(entryId: number, date: string, description: string, categoryId: number): void { }*/ //no database testing
+    //changeEntry(entryId: number, date: string, description: string, categoryId: number): void { } //no database testing
   }
 
   beforeEach(() => {
@@ -110,3 +110,4 @@ describe('ItemDetail', () => {
   });
 
 });
+*/

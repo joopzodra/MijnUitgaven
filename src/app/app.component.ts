@@ -10,7 +10,8 @@ import { AboutPage } from '../pages/about/about';
   templateUrl: 'app.html'
 })
 export class MyApp {
-  rootPage = OverviewPage;
+
+  public rootPage = OverviewPage;
 
   //see Ionic docs, Navigating from the Root component: https://ionicframework.com/docs/v2/api/navigation/NavController/
   @ViewChild('content') navCtrl: NavController;
@@ -22,19 +23,26 @@ export class MyApp {
     });
   }
 
-  openPage(page) {
+  private openPage(page) {
 
-    //Don't stack menu pages
-    let previousPage = this.navCtrl.last().instance.constructor.name;
-    if (previousPage === 'ChangeCategoriesPage' || previousPage === 'AboutPage') {
-      this.navCtrl.pop();
-    }
+    let nextPage;
 
     if (page === 'changeCategories') {
-      this.navCtrl.push(ChangeCategoriesPage);
+      nextPage = ChangeCategoriesPage;
     }
     if (page === 'about') {
-      this.navCtrl.push(AboutPage);
+      nextPage = AboutPage;
     }
+
+    this.navCtrl.push(nextPage, {page})
+      .then(() => {        
+        //Don't stack menu pages
+        const previousPage = this.navCtrl.getPrevious();
+        if (previousPage.data.page === 'changeCategories' || previousPage.data.page === 'about') {
+          console.log('removing previous page')
+          this.navCtrl.removeView(previousPage)
+        }
+      });
+
   }
 }

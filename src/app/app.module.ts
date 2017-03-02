@@ -1,5 +1,5 @@
 import { NgModule, ErrorHandler } from '@angular/core';
-import { FormsModule }   from '@angular/forms';
+import { ReactiveFormsModule }   from '@angular/forms';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { SQLite } from 'ionic-native';
 
@@ -8,11 +8,10 @@ import { OverviewPage } from '../pages/overview/overview';
 import { Pie } from '../pages/overview/pie/pie';
 import { Line } from '../pages/overview/line/line';
 import { ListPage } from '../pages/list/list';
-import { ItemDetail } from '../pages/itemdetail/itemdetail';
+import { EntryComp } from '../pages/entry/entry';
 import { ChangeCategoriesPage } from '../pages/change-categories/change-categories';
 import { AboutPage } from '../pages/about/about';
 import { ColoredBorderDirective } from '../helpers/colored-border.directive';
-import { NewEntry } from '../pages/new-entry/new-entry';
 
 import { EuroPipe } from '../pipes/euro.pipe';
 import { DatePipe } from '../pipes/date.pipe';
@@ -27,30 +26,28 @@ import { SQLiteService } from '../services/sqlite.service';
     Pie,
     Line,
     ListPage,
-    ItemDetail,
+    EntryComp,
     ChangeCategoriesPage,
     EuroPipe,
     DatePipe,
     MonthPipe,
     AboutPage,
-    ColoredBorderDirective,
-    NewEntry
+    ColoredBorderDirective
   ],
   imports: [
     IonicModule.forRoot(MyApp, {
       backButtonText: 'Terug'
     }),
-    FormsModule
+    ReactiveFormsModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
     OverviewPage,    
     ListPage,
-    ItemDetail,
+    EntryComp,
     ChangeCategoriesPage,
-    AboutPage,
-    NewEntry
+    AboutPage
   ],
   providers: [
   {provide: ErrorHandler, useClass: IonicErrorHandler},

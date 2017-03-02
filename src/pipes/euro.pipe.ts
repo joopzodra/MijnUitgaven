@@ -12,7 +12,7 @@ export class EuroPipe implements PipeTransform {
     currency: ['€ ', '']
   });
 
-  transform(value: number): string {
+  public transform(value: number): string {
     return this.nl.format("$.2f")(value);
   }
 

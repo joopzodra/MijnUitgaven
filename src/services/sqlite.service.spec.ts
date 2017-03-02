@@ -26,7 +26,7 @@ describe('SQLiteService', () => {
 
     service = new SQLiteService(platform);
     let db = window.setInterval(() => {
-      if (service.db) {
+      if (service['db']) {
         clearInterval(db);
         done();
       }
@@ -46,7 +46,7 @@ describe('SQLiteService', () => {
   });
 
   it('getItem returns the expected item', done => {
-    service.getItem(1).then(item => {
+    service.getEntry(1).then(item => {
       expect(item.description).toBe('Haan ALMERE');
       expect(item.categoryId).toBe(4);
       done();

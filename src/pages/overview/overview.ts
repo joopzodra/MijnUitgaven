@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 
-import { NewEntry } from '../new-entry/new-entry';
+import { EntryComp } from '../entry/entry';
 
 @Component({
   selector: 'page-overview',
@@ -10,15 +10,15 @@ import { NewEntry } from '../new-entry/new-entry';
 
 export class OverviewPage {
 
-  yearmonth: string;
+  private yearmonth: string;
 
   constructor(public navCtrl: NavController) { }
 
-  yearMonthMessageHandler(event) {
+  private yearMonthMessageHandler(event) {
     this.yearmonth = event;
   }
 
-  addEntry() {
-    this.navCtrl.push(NewEntry);
+  private addEntry() {
+    this.navCtrl.push(EntryComp, { entryId: null });
   }
 }

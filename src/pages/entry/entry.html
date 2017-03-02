@@ -1,0 +1,103 @@
+<ion-header>
+  <ion-navbar>
+    <ion-buttons end>
+      <button *ngIf="submitted && entryForm && (!entryForm.pristine || entryId)" ion-button (click)="addEntry()" class="add-button">
+        Uitgave toevoegen
+      </button>
+      <button class="menu-button" ion-button menuToggle [class.disabled]="!submitted">
+        <ion-icon name="menu"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content class="entry">
+  
+  <ion-card *ngIf="entry">
+    <ion-card-content class="entry-display-outer">
+      <ion-item class="icon-container">
+        <ion-icon *ngIf="categories" item-left [style.background-color]="colorTable[entryForm.get('categoryId').value]" [myColoredBorder]="entryForm.get('categoryId').value">
+        </ion-icon>
+        <div class="entry-display-inner">
+          <p *ngIf="categories" class="entry-cat">{{categories[entryForm.get('categoryId').value] | uppercase}}</p>  
+          <p class="date-and-paymentmeth-container">
+            <span class="entry-date">{{ numberDate(entryForm.get('date').value) | date}}</span>
+            <span class="entry-pay-meth">{{entryForm.get('payment_method').value}}</span>
+          </p>
+          <p class="entry-description">{{entryForm.get('description').value}}</p>
+          <h3 class="entry-amount" *ngIf="entryForm.get('amount').value !== 'NaN'">{{entryForm.get('amount').value | euro}}</h3>
+        </div>
+      </ion-item>
+
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card *ngIf="entry">
+    <ion-card-content class="entry-form-outer">
+
+    <h2>{{title}}:</h2>
+
+      <ion-list>
+
+        <form (ngSubmit)="onSubmit()" [formGroup]="entryForm" >
+
+          <ion-item>
+            <ion-label color="primary" stacked>Bedrag:</ion-label>
+            <ion-input type="number" lang="nl" placeholder="vul in ..." formControlName="amount" min="0.01" max="9999999999999999999" step="0.01" ></ion-input>
+          </ion-item>
+
+          <div *ngIf="formErrors.amount" class="alert alert-danger">
+            {{ formErrors.amount }}
+          </div>
+
+          <ion-label color="primary" stacked class="date-label">Datum:</ion-label>
+          <ion-item class="datetime-item">            
+            <ion-datetime displayFormat="D MMMM YYYY" pickerFormat="DD MMMM YYYY" min="2015-06-01" max="2016-06-30" monthNames="januari,februari,maart,april,mei,juni,juli,augustus,september,oktober,november,december" cancelText="Annuleer" doneText="OK" formControlName="date"></ion-datetime>
+            <ion-icon item-content name="arrow-down"></ion-icon>
+          </ion-item>
+
+          <ion-item *ngIf="categories">
+            <ion-label color="primary" stacked class="category-label">Rubriek:</ion-label>
+            <ion-select formControlName="categoryId" cancelText="annuleer" placeholder="kies ...">     
+              <ion-option *ngFor="let catKey of catKeys.slice(1)" [value]=catKey>{{categories[catKey]}}</ion-option>
+            </ion-select>
+          </ion-item> 
+
+          <ion-item>
+            <ion-label color="primary" stacked class="paymentmethod-label">Soort betaling:</ion-label>
+            <ion-select formControlName="payment_method" cancelText="annuleer" placeholder="kies ...">     
+              <ion-option *ngFor="let method of paymentMethods" [value]=method>{{method}}</ion-option>
+            </ion-select>
+          </ion-item>
+
+          <ion-item>
+            <ion-label color="primary" stacked class="description-label">Omschrijving:</ion-label>
+            <ion-textarea rows="6" formControlName="description" placeholder="vul in ..."></ion-textarea>
+          </ion-item>
+
+          <div *ngIf="formErrors.description" class="alert alert-danger">
+            {{ formErrors.description }}
+          </div>
+
+          <ion-item>
+            <ion-buttons start>
+              <button ion-button [disabled]="submitted" (click)="cancel()">Annuleer</button>
+              <button ion-button type="submit" [disabled]="submitted || !entryForm.valid">Opslaan</button>
+            </ion-buttons>
+          </ion-item>
+
+        </form>
+
+        <ion-item class="add-delete-buttons">
+          <ion-buttons end>
+            <button ion-button [style.visibility]="submitted && entryId ? 'visible' : 'hidden'" class="delete-button" (click)="showDeleteAlert()" color="danger">Verwijder</button>
+          </ion-buttons>
+        </ion-item>
+
+      </ion-list>
+
+
+    </ion-card-content>
+  </ion-card>
+
+</ion-content>

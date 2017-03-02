@@ -1,24 +1,29 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>
-      Rubriek
-    </ion-title>
-    <button ion-button menuToggle right>
-      <ion-icon name="menu"></ion-icon>
-    </button>
+    <ion-buttons end>
+      <button ion-button class="add-button" (click)="addEntry()">
+        Uitgave toevoegen
+      </button>
+      <button class="menu-button" ion-button menuToggle>
+        <ion-icon name="menu"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
 <ion-content class="list-page" padding>
 
+  <h2>Rubriek: {{categories[catId]}}</h2>
   <div class="pie-month-amount">
     <ion-item>
-      <p item-left>{{month | month | uppercase}}</p>
-      <h3 item-right *ngIf="monthTotal">{{categories[catId]}}: {{-monthTotal | euro}}</h3>
+      <p>{{month | month | uppercase}}
+        <span *ngIf="monthTotal" class="month-total">totaal: {{monthTotal | euro}}</span>
+      </p>
+      
     </ion-item>
   </div>
 
-  <ion-list *ngIf="data && data.length > 1">
+  <ion-list *ngIf="data && data.length > 1" class="sort-block">
     <ion-item>
       <ion-label>Sorteer op: </ion-label>
       <ion-select [(ngModel)]="sortBy" (ionChange)="sort()">
@@ -38,7 +43,7 @@
         <span class="list-pay-meth">{{item.payment_method}}</span>
       </p>
       <p class="list-description">{{item.description}}</p>
-      <h3 class="list-amount">{{-item.amount | euro}}</h3>
+      <h3 class="list-amount">{{item.amount | euro}}</h3>
       <ion-icon item-right name="arrow-forward"></ion-icon>
     </ion-item>
   </ion-list>

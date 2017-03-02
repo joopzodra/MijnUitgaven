@@ -1,4 +1,44 @@
+  .add-button {
+    color: white;
+    background-color: map-get($colors, secondary);
+
+    @media (max-width: 350px) {
+      max-width: 125px;
+      font-size: 12px;
+    }
+  }
+
+  .menu-button {
+    display: inline-block;
+  }
+
 .list-page {
+
+  h2 {
+    font-size: 1.8rem;
+  }
+
+  .list-ios {
+    margin-bottom: 10px;
+  }
+
+  .list-ios > .item-block:first-child, .list-ios > .item-block:last-child {
+    border: none;
+  }
+
+  .month-total {
+    float: right;
+    color: black;
+  }
+
+  .sort-block {
+    .label {
+      max-width: 90px;      
+    }
+    .select {
+      padding-left: 0;
+    }
+  }
 
   ion-icon {
     width: 16px;

@@ -1,0 +1,143 @@
+/*outside the .entry class (above the page content)*/
+
+.menu-button.disabled {
+  pointer-events: none;
+  opacity: 0.2;
+}
+
+.entry {
+
+  h2 {
+    font-size: 1.8rem;
+    font-weight: 600;
+  }
+
+  /*Override Ionic validation styles, since we do Angulare Reactive form validation*/
+  .item-inner {
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  background-color: #ddd;
+
+
+/* upper part which displays the entry data */
+
+  /* ion-navbar ion-icon */
+
+  .entry-display-outer {
+    display: -webkit-flex;
+    display: flex;
+    padding: 0 16px;
+
+    ion-icon {
+      width: 16px;
+      height: 16px;
+      border-radius: 8px;
+      min-height: 0;
+      min-width: 0 !important;
+    }
+  }
+
+  .icon-container {
+    margin: 3px 15px 0 0;
+  }
+
+  .entry-cat {
+    text-transform: uppercase;
+    font-size: 1.2rem;
+    color: black;
+    display: inline-block;
+    margin-bottom: 0;
+  }
+
+  .date-and-paymentmeth-container {
+    overflow: hidden;
+  }
+
+  .entry-date {
+    margin-bottom: 6px;
+    font-style: italic;
+    font-size: 1.3rem;
+    float: left;
+  }
+
+  .entry-pay-meth {
+    margin-bottom: 6px;
+    float: right;
+    font-size: 1.1rem;
+  }
+
+  .entry-description {
+    white-space: normal;
+    font-size: 1.2rem;
+    overflow: visible;
+  }
+
+  .entry-amount {
+    font-weight: bold;
+  }
+
+
+/* Form */
+
+  .entry-form-outer {
+    padding: 10px 16px;
+  }
+  
+  .text-input {
+    background-color: rgb(252,252,252);
+    border: 1px solid rgb(230,230,230);  
+  }
+
+  .date-label {
+    padding-left: 16px;
+    margin-top: 5px;
+  }
+
+  .datetime-item {
+    min-height: 0;
+
+    ion-icon {
+      color: #999;
+    }
+  }
+
+  .datetime {
+    padding: 0 8px;
+  }
+
+  .category-label, .description-label, .paymentmethod-label {
+    margin-top: 5px;
+  }
+
+  input, ion-select, ion-textarea {
+    padding-left: 5px !important;
+  }
+
+  input.ng-invalid, ion-select.ng-invalid, ion-textarea.ng-invalid {
+    border-left: 4px solid map-get($colors, danger);
+  }
+
+  .alert-danger {
+    padding-left: 16px;
+    color: map-get($colors, danger);
+    font-size: 13px;
+  }
+
+/* Add-delete buttons */
+
+  .add-delete-buttons {
+    border-bottom: none !important;
+  }
+
+  .add-delete-buttons button {
+    padding-left: 4px;
+    padding-right: 4px;
+  }
+
+  .delete-button {
+    float: right;
+  }
+
+}
