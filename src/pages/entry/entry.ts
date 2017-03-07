@@ -41,7 +41,7 @@ export class EntryComp implements OnInit {
       this.title = 'Uitgave toevoegen';
       let isoDate = this.currentDate.toISOString();
       let date = +(isoDate.slice(0, 4) + isoDate.slice(5, 7) + isoDate.slice(8, 10))
-      this.entry = { entryId: null, date: date, amount: undefined, payment_method: null, description: null, categoryId: null };
+      this.entry = { entryId: null, date: date, amount: undefined, payment_method: '', description: '', categoryId: null };
       this.buildForm();
     }
 
@@ -172,10 +172,17 @@ export class EntryComp implements OnInit {
     }
   }
 
-  private cancel() {
-    this.buildForm();
-    this.submitted = true;
-  }
+    private cancel() {
+      this.entryForm.reset({
+        amount: this.entry.amount,
+        date: this.entry.date,
+        payment_method: this.entry.payment_method,
+        description: this.entry.description,
+        categoryId: this.entry.categoryId
+      });
+
+      this.submitted = true;
+    }
 
   private ionViewCanLeave(): boolean {
     if (!this.submitted) {

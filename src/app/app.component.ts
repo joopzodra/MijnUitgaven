@@ -39,7 +39,6 @@ export class MyApp {
         //Don't stack menu pages
         const previousPage = this.navCtrl.getPrevious();
         if (previousPage.data.page === 'changeCategories' || previousPage.data.page === 'about') {
-          console.log('removing previous page')
           this.navCtrl.removeView(previousPage)
         }
       });

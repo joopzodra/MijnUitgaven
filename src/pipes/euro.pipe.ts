@@ -13,7 +13,10 @@ export class EuroPipe implements PipeTransform {
   });
 
   public transform(value: number): string {
-    return this.nl.format("$.2f")(value);
+
+    if (value) {
+       return this.nl.format("$.2f")(value);
+    }
   }
 
 }
