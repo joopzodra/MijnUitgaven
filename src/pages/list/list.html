@@ -13,7 +13,7 @@
 
 <ion-content class="list-page" padding>
 
-  <h2>Rubriek: {{categories[catId]}}</h2>
+  <h2 *ngIf="categories">Rubriek: {{categories[catId]}}</h2>
   <div class="pie-month-amount">
     <ion-item>
       <p>{{month | month | uppercase}}
@@ -37,7 +37,7 @@
     <ion-item *ngFor="let item of data" (click)="itemSelected(item)">
       <ion-icon item-left [style.background-color]="colorTable[item.categoryId]" [myColoredBorder]="item.categoryId">
       </ion-icon>
-      <p class="list-cat">{{categories[item.categoryId]}}</p>  
+      <p *ngIf="categories" class="list-cat">{{categories[item.categoryId]}}</p>  
       <p class="date-and-paymentmeth-container">
         <span class="list-date">{{item.date | date}}</span>
         <span class="list-pay-meth">{{item.payment_method}}</span>

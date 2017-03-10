@@ -44,7 +44,7 @@ describe('ListPage', () => {
 
   class MockNavParams {
     dataSource = Observable.fromPromise(getByCatAndDate(1, new Date(), new Date()));
-    catsSource = Observable.fromPromise(new Promise((resolve, reject) => window.setTimeout(() => resolve(categories), 100)))
+    catsSource = Observable.fromPromise(new Promise((resolve, reject) => window.setTimeout(() => resolve(categories), 100)));
     data = { dataSource: this.dataSource, catsSource: this.catsSource, catId: 2 };
     get(params) {
       return this.data[params];
@@ -97,8 +97,7 @@ describe('ListPage', () => {
         comp['sortBy'] = 'amount';
         comp['sort']();
         for (let i = 0; i < comp['data'].length - 1; i++) {
-          //reversed because of negative amounts (sign is only reversed in html-template)
-          expect(comp['data'][i + 1].amount).toBeGreaterThanOrEqual(comp['data'][i].amount)
+          expect(comp['data'][i].amount).toBeGreaterThanOrEqual(comp['data'][i + 1].amount)
         }      
     })
     .then(done);
