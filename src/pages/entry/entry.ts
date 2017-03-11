@@ -169,6 +169,7 @@ export class EntryComp implements OnInit {
       this.sqlite.changeEntry(this.entryId, +this.entryForm.get('date').value.split('-').join(''), +this.entryForm.get('amount').value, this.entryForm.get('payment_method').value, this.entryForm.get('description').value, +this.entryForm.get('categoryId').value);
     } else {
       this.sqlite.newEntry(+this.entryForm.get('date').value.split('-').join(''), +this.entryForm.get('amount').value, this.entryForm.get('payment_method').value, this.entryForm.get('description').value, +this.entryForm.get('categoryId').value)
+      .then(response => this.entryId = response);
     }
   }
 
