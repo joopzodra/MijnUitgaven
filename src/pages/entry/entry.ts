@@ -172,17 +172,17 @@ export class EntryComp implements OnInit {
     }
   }
 
-    private cancel() {
-      this.entryForm.reset({
-        amount: this.entry.amount,
-        date: this.entry.date,
-        payment_method: this.entry.payment_method,
-        description: this.entry.description,
-        categoryId: this.entry.categoryId
-      });
+  private cancel() {
+    this.entryForm.reset({
+      amount: this.entry.amount,
+      date: this.entry.date,
+      payment_method: this.entry.payment_method,
+      description: this.entry.description,
+      categoryId: this.entry.categoryId
+    });
 
-      this.submitted = true;
-    }
+    this.submitted = true;
+  }
 
   private ionViewCanLeave(): boolean {
     if (!this.submitted) {

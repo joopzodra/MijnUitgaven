@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import { Subject } from 'rxjs';
 
 import { ConfigMock } from '../../mocks';
-import { ItemDetail } from './itemdetail';
+import { EntryComp } from './entry';
 import { EuroPipe } from '../../pipes/euro.pipe';
 import { DatePipe } from '../../pipes/date.pipe';
 import { SQLiteService } from '../../services/sqlite.service';
@@ -14,10 +14,10 @@ import { categoriesCsv } from '../../helpers/dexie-db/categories-csv';
 import { IEntry } from '../../datatypes/i-entry';
 import { ColoredBorderDirective } from '../../helpers/colored-border.directive';
 
-/*describe('ItemDetail', () => {
+describe('Entry page', () => {
 
-  let comp: ItemDetail;
-  let fixture: ComponentFixture<ItemDetail>;
+  let comp: EntryComp;
+  let fixture: ComponentFixture<EntryComp>;
   let sqlService: SQLiteService;
 
   let entry: IEntry = { entryId: 2, date: 20150505, description: 'test', amount: 220.2, categoryId: 1, payment_method: 'test' };
@@ -28,16 +28,9 @@ import { ColoredBorderDirective } from '../../helpers/colored-border.directive';
       return { key: i + 1, value: row };
     });
 
-  //fixed response; stub for SQLiteService.getByCatAndDate, for use in MockNavParams
-  function getByCatAndDate(cat: number | number[], minDate: Date, maxDate: Date): Promise<IEntry[]> {
-    return new Promise((resolve, reject) => window.setTimeout(() => resolve([entry]), 100));
-  }
-
   class MockNavParams {
-    dataSource = Observable.fromPromise(getByCatAndDate(1, new Date(), new Date()));
-    data = { dataSource: this.dataSource, entryId: 2 };
-    get(params) {
-      return this.data[params];
+    get(entryId) {
+      return 2;
     }
   }
 
@@ -45,7 +38,7 @@ import { ColoredBorderDirective } from '../../helpers/colored-border.directive';
 
     categoryChangedSource = new Subject<number>();
 
-    getItem(){
+    getEntry(){
       return Promise.resolve(entry);
     }
 
@@ -54,14 +47,12 @@ import { ColoredBorderDirective } from '../../helpers/colored-border.directive';
       categories.forEach(item => catObj[item.key] = item.value)
       return new Promise((resolve, reject) => window.setTimeout(() => resolve(catObj), 100));
     }
-
-    //changeEntry(entryId: number, date: string, description: string, categoryId: number): void { } //no database testing
   }
 
   beforeEach(() => {
 
     TestBed.configureTestingModule({
-      declarations: [ItemDetail, EuroPipe, DatePipe, ColoredBorderDirective],
+      declarations: [EntryComp, EuroPipe, DatePipe, ColoredBorderDirective],
       providers: [
         DomController,
         Form,
@@ -80,7 +71,7 @@ import { ColoredBorderDirective } from '../../helpers/colored-border.directive';
       imports: [IonicModule],
     });
 
-    fixture = TestBed.createComponent(ItemDetail);
+    fixture = TestBed.createComponent(EntryComp);
     comp = fixture.componentInstance;
     sqlService = fixture.debugElement.injector.get(SQLiteService);
   });
@@ -89,25 +80,22 @@ import { ColoredBorderDirective } from '../../helpers/colored-border.directive';
     fixture.detectChanges();
     fixture.whenStable().then(() => {
       fixture.detectChanges();
-      let de = fixture.debugElement.query(By.css('.itemdetail-amount'));
-      expect(de.nativeElement.textContent).toBe("-€ 220,20");
+      let de = fixture.debugElement.query(By.css('.entry-amount'));
+      expect(de.nativeElement.textContent).toBe("€ 220,20");
     })
       .then(done);
   });
 
-  it('stores initial values so they can be used when the user cancels his input actions', done => {
+  it('entryForm contains correct properties', done => {
     fixture.detectChanges();
     fixture.whenStable().then(() => {
       fixture.detectChanges();
-      expect(comp.storedDescription).toEqual(comp.item.description);
-      expect(comp.storedCategoryId).toEqual(comp.item.categoryId);
-      comp.item.categoryId = 2;
-      comp.item.description = 'testtest';
-      expect(comp.storedDescription).toBe('test');
-      expect(comp.storedCategoryId).toBe(1);
+      let form = comp['entryForm'];
+      expect(form.get('amount').value).toBe('220.20');
+      expect(form.get('date').value).toBe('2015-05-05');
+      expect(form.get('categoryId').value).toBe(1);
     })
       .then(done);
-  });
+  });    
 
 });
-*/
